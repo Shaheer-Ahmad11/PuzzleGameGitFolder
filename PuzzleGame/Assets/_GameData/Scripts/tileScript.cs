@@ -13,22 +13,24 @@ public class tileScript : MonoBehaviour
 
     void Awake()
     {
-        targetPosition=transform.position;
-        correctPosition=transform.position;
-        _sprite=GetComponent<SpriteRenderer>();
-        
+        targetPosition = transform.position;
+        correctPosition = transform.position;
+        _sprite = GetComponent<SpriteRenderer>();
+
     }
 
     void Update()
     {
-        transform.position=Vector3.Lerp(a: transform.position, b: targetPosition, t:0.05f);
-        if(targetPosition==correctPosition){
-            _sprite.color=Color.green;
+        transform.position = Vector3.Lerp(a: transform.position, b: targetPosition, t: 0.3f);
+        if (targetPosition == correctPosition)
+        {
+            _sprite.color = Color.green;
         }
-        else{
-            _sprite.color=Color.white;
+        else
+        {
+            _sprite.color = Color.white;
 
         }
-        
+
     }
 }
