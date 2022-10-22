@@ -2,18 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HomeManager : MonoBehaviour
 {
-
-
-
-
-
-
+    public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel;
+    public Transform puzzleLevelPanel;
+    public Sprite[] puzzleImage;
+    private void Start()
+    {
+        loadPuzzleLevels();
+    }
     public void onPuzzleButonClick()
     {
-        SceneManager.LoadScene("puzzleGameScene");
+        puzzleLevelSelectPanel.SetActive(true);
+        // SceneManager.LoadScene("puzzleGameScene");
+
     }
     public void onSpotDiffButonClick()
     {
@@ -37,6 +41,24 @@ public class HomeManager : MonoBehaviour
             return;
         }
     }
+
+    void loadPuzzleLevels()
+    {
+        for (int i = 0; i < puzzleImage.Length; i++)
+        {
+            GameObject puzzlelevelbutton = Instantiate(LevelSelectButtonPrefab, puzzleLevelPanel);
+            puzzlelevelbutton.name = i.ToString();
+            puzzlelevelbutton.GetComponent<Image>().sprite = puzzleImage[i];
+            if (i != 0)
+            {
+                puzzlelevelbutton.transform.GetChild(1).gameObject.SetActive(false);
+                puzzlelevelbutton.transform.GetChild(2).gameObject.SetActive(true);
+            }
+        }
+    }
+
+
+
 }
 
 
