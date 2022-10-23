@@ -6,12 +6,53 @@ using UnityEngine.UI;
 
 public class HomeManager : MonoBehaviour
 {
-    public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel;
+    public static HomeManager instance;
+    public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel, soundButton, vibrationButton;
     public Transform puzzleLevelPanel;
     public int totalPuzzleLevels, _currentLevel;
 
+    public static bool isSound, isVibration;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
     private void Start()
     {
+        if (!PlayerPrefs.HasKey("Sound"))
+        {
+            PlayerPrefs.SetInt("Sound", 1);
+        }
+        if (!PlayerPrefs.HasKey("Vibration"))
+        {
+            PlayerPrefs.SetInt("Vibration", 1);
+        }
+        if (PlayerPrefs.GetInt("Sound") == 1)
+        {
+            isSound = true;
+            soundButton.transform.GetChild(0).gameObject.SetActive(false);
+            soundButton.transform.GetChild(1).gameObject.SetActive(true);
+        }
+        else
+        {
+            isSound = false;
+            soundButton.transform.GetChild(0).gameObject.SetActive(true);
+            soundButton.transform.GetChild(1).gameObject.SetActive(false);
+        }
+        if (PlayerPrefs.GetInt("Vibration") == 1)
+        {
+            isVibration = true;
+            vibrationButton.transform.GetChild(0).gameObject.SetActive(false);
+            vibrationButton.transform.GetChild(1).gameObject.SetActive(true);
+        }
+        else
+        {
+            isVibration = false;
+            vibrationButton.transform.GetChild(0).gameObject.SetActive(true);
+            vibrationButton.transform.GetChild(1).gameObject.SetActive(false);
+        }
         loadPuzzleLevels();
     }
     public void onPuzzleButonClick()
@@ -71,7 +112,43 @@ public class HomeManager : MonoBehaviour
         }
     }
 
+    public void onSoundButtonClick()
+    {
+        if (isSound)
+        {
+            PlayerPrefs.SetInt("Sound", 0);
+            isSound = false;
+            soundButton.transform.GetChild(0).gameObject.SetActive(true);
+            soundButton.transform.GetChild(1).gameObject.SetActive(false);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Sound", 1);
+            isSound = true;
+            soundButton.transform.GetChild(0).gameObject.SetActive(false);
+            soundButton.transform.GetChild(1).gameObject.SetActive(true);
+        }
+        CheckSound.instance.checkit();
+    }
+    public void onVibrationButtonClick()
+    {
+        if (isVibration)
+        {
 
+            PlayerPrefs.SetInt("Vibration", 0);
+            isVibration = false;
+            vibrationButton.transform.GetChild(0).gameObject.SetActive(true);
+            vibrationButton.transform.GetChild(1).gameObject.SetActive(false);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Vibration", 1);
+            isVibration = true;
+            vibrationButton.transform.GetChild(0).gameObject.SetActive(false);
+            vibrationButton.transform.GetChild(1).gameObject.SetActive(true);
+        }
+        CheckSound.instance.checkit();
+    }
 
 }
 

@@ -1,7 +1,28 @@
 fileFormatVersion: 2
 guid: 338f5fac6749bf04998383f5f6eff2de
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 3488763328608968416
+    second: Settings Splices_0
+  - first:
+      213: -7519603982880370335
+    second: Settings Splices_1
+  - first:
+      213: 2614506232690623155
+    second: Settings Splices_2
+  - first:
+      213: 6095045988084657123
+    second: Settings Splices_3
+  - first:
+      213: 4780894728365731991
+    second: Settings Splices_4
+  - first:
+      213: 8630949890182519052
+    second: Settings Splices_5
+  - first:
+      213: -3651302195268671842
+    second: Settings Splices_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -41,7 +62,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -75,9 +96,192 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Settings Splices_0
+      rect:
+        serializedVersion: 2
+        x: 971
+        y: 10590
+        width: 1064
+        height: 1085
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ee952b53c39a6030800000000000000
+      internalID: 3488763328608968416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Settings Splices_1
+      rect:
+        serializedVersion: 2
+        x: 4337
+        y: 10402
+        width: 1516
+        height: 1498
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1619dc4a40005a790800000000000000
+      internalID: -7519603982880370335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Settings Splices_2
+      rect:
+        serializedVersion: 2
+        x: 318
+        y: 7612
+        width: 6158
+        height: 1479
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b2c19ef097984420800000000000000
+      internalID: 2614506232690623155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Settings Splices_3
+      rect:
+        serializedVersion: 2
+        x: 9646
+        y: 8574
+        width: 2938
+        height: 1115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3eba4718804f59450800000000000000
+      internalID: 6095045988084657123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Settings Splices_4
+      rect:
+        serializedVersion: 2
+        x: 9051
+        y: 6086
+        width: 4104
+        height: 808
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 790f6c8dc66295240800000000000000
+      internalID: 4780894728365731991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Settings Splices_5
+      rect:
+        serializedVersion: 2
+        x: 9747
+        y: 1056
+        width: 3408
+        height: 879
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c099686423b47c770800000000000000
+      internalID: 8630949890182519052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Settings Splices_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 6866
+        height: 6060
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e962863bff7f35dc0800000000000000
+      internalID: -3651302195268671842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
