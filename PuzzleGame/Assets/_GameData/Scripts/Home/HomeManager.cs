@@ -8,7 +8,8 @@ public class HomeManager : MonoBehaviour
 {
     public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel;
     public Transform puzzleLevelPanel;
-    public Sprite[] puzzleImage;
+    public int totalPuzzleLevels, _currentLevel;
+
     private void Start()
     {
         loadPuzzleLevels();
@@ -44,16 +45,29 @@ public class HomeManager : MonoBehaviour
 
     void loadPuzzleLevels()
     {
-        for (int i = 0; i < puzzleImage.Length; i++)
+        for (int i = 0; i <= totalPuzzleLevels; i++)
         {
-            GameObject puzzlelevelbutton = Instantiate(LevelSelectButtonPrefab, puzzleLevelPanel);
-            puzzlelevelbutton.name = i.ToString();
-            puzzlelevelbutton.GetComponent<Image>().sprite = puzzleImage[i];
             if (i != 0)
             {
-                puzzlelevelbutton.transform.GetChild(1).gameObject.SetActive(false);
-                puzzlelevelbutton.transform.GetChild(2).gameObject.SetActive(true);
+                GameObject puzzlelevelbutton = Instantiate(LevelSelectButtonPrefab, puzzleLevelPanel);
+                puzzlelevelbutton.name = i.ToString();
+                Sprite puzzleimage = Resources.Load<Sprite>("Puzzle/" + i);
+                puzzlelevelbutton.transform.GetChild(0).GetComponent<Image>().sprite = puzzleimage;
+                if (i < _currentLevel)
+                {
+                    puzzlelevelbutton.transform.GetChild(1).gameObject.SetActive(false);
+                    puzzlelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
+                    puzzlelevelbutton.transform.GetChild(3).gameObject.SetActive(false);
+                }
+
+                else if (i != _currentLevel)
+                {
+                    puzzlelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
+                    puzzlelevelbutton.transform.GetChild(3).gameObject.SetActive(true);
+                }
             }
+
+
         }
     }
 
