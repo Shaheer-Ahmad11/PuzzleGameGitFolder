@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: df5b35e6a22736249af56bcb862de354
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Sonorous
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: fa4089dd5744b0c449d46aaf62f75646, type: 3}
+  - {fileID: 12800000, guid: 054e1cbd016b5894ba3817f973da43c8, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
