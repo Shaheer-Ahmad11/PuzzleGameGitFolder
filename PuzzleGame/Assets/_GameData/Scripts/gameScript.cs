@@ -8,8 +8,11 @@ public class gameScript : MonoBehaviour
     private Camera _camera;
     [SerializeField] private tileScript[] tiles;
     private int emptySpaceIndex = 8;
+    public GameObject panel;
+    public Animator animator;
     void Start()
     {
+        
         _camera=Camera.main;
         shuffle();
         
@@ -35,11 +38,28 @@ public class gameScript : MonoBehaviour
                     tiles[tileIndex]=null;
                     emptySpaceIndex=tileIndex;
 
-
                 }
-
             }
         } 
+        int correctTiles=0;
+        foreach (var a in tiles)
+        {
+            if(a!=null){
+
+                if(a.inRightPlace){
+                    correctTiles++;
+                }
+            }
+            
+        }
+        if(correctTiles==tiles.Length-1){
+        //    var a= GetComponent<timerScript>();
+        //    a.StopTImer();
+            timerScript.instance.StopTImer();
+            StartCoroutine(waiting());
+           
+
+        }
     }
 
     void shuffle(){
@@ -104,6 +124,12 @@ public class gameScript : MonoBehaviour
             inversionsSum += thisTileInvertion;
         }
         return inversionsSum;
+    }
+    IEnumerator waiting(){
+        yield return new WaitForSeconds(2f);
+        animator.SetTrigger("new");
+         yield return new WaitForSeconds(5f);
+         panel.SetActive(true);
     }
 
 }

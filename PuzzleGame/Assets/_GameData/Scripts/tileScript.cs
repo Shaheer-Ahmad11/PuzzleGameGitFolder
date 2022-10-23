@@ -8,8 +8,8 @@ public class tileScript : MonoBehaviour
     private Vector3 correctPosition;
     private SpriteRenderer _sprite;
     public int number;
-
-
+    public bool  inRightPlace=false;
+    
 
     void Awake()
     {
@@ -25,12 +25,17 @@ public class tileScript : MonoBehaviour
         if (targetPosition == correctPosition)
         {
             _sprite.color = Color.green;
+            inRightPlace=true;
+            
         }
+       
         else
         {
             _sprite.color = Color.white;
+            inRightPlace=false;
 
         }
+
 
     }
 }
