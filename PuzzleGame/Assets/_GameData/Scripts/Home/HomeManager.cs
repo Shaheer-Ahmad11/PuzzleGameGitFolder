@@ -58,7 +58,10 @@ public class HomeManager : MonoBehaviour
     public void onPuzzleButonClick()
     {
         puzzleLevelSelectPanel.SetActive(true);
-        // SceneManager.LoadScene("puzzleGameScene");
+
+    }
+    public void loadPuzzleLevel(){
+        SceneManager.LoadScene("puzzleGameScene");
 
     }
     public void onSpotDiffButonClick()
@@ -94,6 +97,7 @@ public class HomeManager : MonoBehaviour
                 puzzlelevelbutton.name = i.ToString();
                 Sprite puzzleimage = Resources.Load<Sprite>("Puzzle/" + i);
                 puzzlelevelbutton.transform.GetChild(0).GetComponent<Image>().sprite = puzzleimage;
+                puzzlelevelbutton.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(loadPuzzleLevel);
                 if (i < _currentLevel)
                 {
                     puzzlelevelbutton.transform.GetChild(1).gameObject.SetActive(false);
