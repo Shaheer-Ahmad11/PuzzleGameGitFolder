@@ -124,12 +124,12 @@ TextureImporter:
       name: coinBG_0
       rect:
         serializedVersion: 2
-        x: 251
-        y: 6890
-        width: 8102
-        height: 4014
+        x: 0
+        y: 6436
+        width: 8816
+        height: 4718
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -145,12 +145,12 @@ TextureImporter:
       name: Coin$
       rect:
         serializedVersion: 2
-        x: 2263
+        x: 2134
         y: 0
-        width: 4066
-        height: 4055
+        width: 4349
+        height: 4158
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

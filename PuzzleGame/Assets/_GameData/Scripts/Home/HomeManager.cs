@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class HomeManager : MonoBehaviour
 {
     public static HomeManager instance;
-    public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel, soundButton, vibrationButton;
-    public Transform puzzleLevelPanel;
-    public int totalPuzzleLevels, _currentLevel;
+    public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel, differenceLevelSelectPanel, soundButton, vibrationButton;
+    public Transform puzzleLevelPanel, differenceLevelPanel;
+    public int totalPuzzleLevels, _currentPuzzleLevel, totalDifferenceLevels, _currentDifferenceLevel;
 
     public static bool isSound, isVibration;
     private void Awake()
@@ -54,17 +54,23 @@ public class HomeManager : MonoBehaviour
             vibrationButton.transform.GetChild(1).gameObject.SetActive(false);
         }
         loadPuzzleLevels();
+        loadDifferenceLevel();
     }
     public void onPuzzleButonClick()
     {
         puzzleLevelSelectPanel.SetActive(true);
 
     }
-    public void loadPuzzleLevel(){
+    public void loadPuzzleLevelScene()
+    {
         SceneManager.LoadScene("puzzleGameScene");
 
     }
     public void onSpotDiffButonClick()
+    {
+        differenceLevelSelectPanel.SetActive(true);
+    }
+    public void loadDifferencelevelScene()
     {
         SceneManager.LoadScene("lvlGame");
     }
@@ -89,31 +95,48 @@ public class HomeManager : MonoBehaviour
 
     void loadPuzzleLevels()
     {
-        for (int i = 0; i <= totalPuzzleLevels; i++)
+        for (int i = 1; i <= totalPuzzleLevels; i++)
         {
-            if (i != 0)
+            GameObject puzzlelevelbutton = Instantiate(LevelSelectButtonPrefab, puzzleLevelPanel);
+            puzzlelevelbutton.name = i.ToString();
+            Sprite puzzleimage = Resources.Load<Sprite>("Puzzle/" + i);
+            puzzlelevelbutton.transform.GetChild(0).GetComponent<Image>().sprite = puzzleimage;
+            puzzlelevelbutton.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(loadPuzzleLevelScene);
+            if (i < _currentPuzzleLevel)
             {
-                GameObject puzzlelevelbutton = Instantiate(LevelSelectButtonPrefab, puzzleLevelPanel);
-                puzzlelevelbutton.name = i.ToString();
-                Sprite puzzleimage = Resources.Load<Sprite>("Puzzle/" + i);
-                puzzlelevelbutton.transform.GetChild(0).GetComponent<Image>().sprite = puzzleimage;
-                puzzlelevelbutton.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(loadPuzzleLevel);
-                if (i < _currentLevel)
-                {
-                    puzzlelevelbutton.transform.GetChild(1).gameObject.SetActive(false);
-                    puzzlelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
-                    puzzlelevelbutton.transform.GetChild(3).gameObject.SetActive(false);
-                }
-
-                else if (i != _currentLevel)
-                {
-                    puzzlelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
-                    puzzlelevelbutton.transform.GetChild(3).gameObject.SetActive(true);
-                }
+                puzzlelevelbutton.transform.GetChild(1).gameObject.SetActive(false);
+                puzzlelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
+                puzzlelevelbutton.transform.GetChild(3).gameObject.SetActive(false);
             }
-
-
+            else if (i != _currentPuzzleLevel)
+            {
+                puzzlelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
+                puzzlelevelbutton.transform.GetChild(3).gameObject.SetActive(true);
+            }
         }
+    }
+    public void loadDifferenceLevel()
+    {
+        for (int i = 1; i <= totalDifferenceLevels; i++)
+        {
+            GameObject differencelevelbutton = Instantiate(LevelSelectButtonPrefab, differenceLevelPanel);
+            differencelevelbutton.name = i.ToString();
+            Sprite differenceImage = Resources.Load<Sprite>("Difference/" + i);
+            differencelevelbutton.transform.GetChild(0).GetComponent<Image>().sprite = differenceImage;
+            differencelevelbutton.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(loadDifferencelevelScene);
+            if (i < _currentDifferenceLevel)
+            {
+                differencelevelbutton.transform.GetChild(1).gameObject.SetActive(false);
+                differencelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
+                differencelevelbutton.transform.GetChild(3).gameObject.SetActive(false);
+            }
+            else if (i != _currentDifferenceLevel)
+            {
+                differencelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
+                differencelevelbutton.transform.GetChild(3).gameObject.SetActive(true);
+            }
+        }
+
     }
 
     public void onSoundButtonClick()
@@ -155,8 +178,3 @@ public class HomeManager : MonoBehaviour
     }
 
 }
-
-
-
-
-
