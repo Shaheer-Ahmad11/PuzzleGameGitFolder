@@ -12,9 +12,12 @@ EditorBuildSettings:
     path: Assets/_GameData/Scenes/Home.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Find The Differences/Scenes/lvlGame.unity
-    guid: e00a19b7ef76c7a44a3f7561c46692c6
-  - enabled: 1
     path: Assets/_GameData/Scenes/puzzleGameScene.unity
     guid: dcd0620d174731c4f8c572d6aee75cf3
+  - enabled: 1
+    path: Assets/Find The Differences/Scenes/lvlGame.unity
+    guid: e00a19b7ef76c7a44a3f7561c46692c6
+  - enabled: 0
+    path: Assets/_GameData/FBLoginExp.unity
+    guid: 7ac087b76053496489ac30ab5e08bc2a
   m_configObjects: {}

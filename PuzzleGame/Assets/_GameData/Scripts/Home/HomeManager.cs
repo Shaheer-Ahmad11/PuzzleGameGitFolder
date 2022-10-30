@@ -76,21 +76,21 @@ public class HomeManager : MonoBehaviour
     }
     public void onSettingsClick()
     {
-        if (AdMobManager.instance.isInterstitialReady)
-        { AdMobManager.instance.ShowInterstitial(); }
-        else
-        { return; }
+        // if (AdMobManager.instance.isInterstitialReady)
+        // { AdMobManager.instance.ShowInterstitial(); }
+        // else
+        // { return; }
     }
     public void onLoginClick()
     {
-        if (AdMobManager.instance.isRewardedReady)
-        {
-            AdMobManager.instance.ShowRewardBasedVideo();
-        }
-        else
-        {
-            return;
-        }
+        // if (AdMobManager.instance.isRewardedReady)
+        // {
+        //     AdMobManager.instance.ShowRewardBasedVideo();
+        // }
+        // else
+        // {
+        //     return;
+        // }
     }
 
     void loadPuzzleLevels()
@@ -138,7 +138,6 @@ public class HomeManager : MonoBehaviour
         }
 
     }
-
     public void onSoundButtonClick()
     {
         if (isSound)
