@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Find The Differences/Scenes/lvlGame.unity
     guid: e00a19b7ef76c7a44a3f7561c46692c6
+  - enabled: 1
+    path: Assets/_GameData/Scenes/MatchingCards.unity
+    guid: 9a462a05e59cb134e8080af006188592
   - enabled: 0
     path: Assets/_GameData/FBLoginExp.unity
     guid: 7ac087b76053496489ac30ab5e08bc2a

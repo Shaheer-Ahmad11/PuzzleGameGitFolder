@@ -66,6 +66,10 @@ public class HomeManager : MonoBehaviour
         SceneManager.LoadScene("puzzleGameScene");
 
     }
+    public void loadCardsLevel()
+    {
+        SceneManager.LoadScene("MatchingCards");
+    }
     public void onSpotDiffButonClick()
     {
         differenceLevelSelectPanel.SetActive(true);
@@ -137,6 +141,10 @@ public class HomeManager : MonoBehaviour
             }
         }
 
+    }
+    public void onMatchingCardsBtnClick()
+    {
+        loadCardsLevel();
     }
     public void onSoundButtonClick()
     {
