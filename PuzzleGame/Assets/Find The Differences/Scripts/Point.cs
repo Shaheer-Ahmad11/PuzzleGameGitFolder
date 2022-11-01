@@ -5,6 +5,7 @@ public class Point : MonoBehaviour
 	public Sprite spPointCheck;
 
 	public bool enable = true;
+	// public static bool heart=false;
 
 	private void Start()
 	{

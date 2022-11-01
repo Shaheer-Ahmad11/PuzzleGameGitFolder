@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     private GameObject levelImageB;
 
     private GameObject objWin;
+    public GameObject heartParent;
+    public int heartCount = 3;
 
     private void Start()
     {
@@ -247,6 +249,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("lvlGame");
     }
 
+
+
     private void Update()
     {
         if (!Input.GetMouseButtonUp(0) || !(SceneManager.GetActiveScene().name == "lvlGame") || objWin.activeSelf)
@@ -264,5 +268,10 @@ public class GameManager : MonoBehaviour
             }
             touchCounter = 0;
         }
+    }
+
+    public void GoToHome()
+    {
+        SceneManager.LoadScene("Home");
     }
 }
