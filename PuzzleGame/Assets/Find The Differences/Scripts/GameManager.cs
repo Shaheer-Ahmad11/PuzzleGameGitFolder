@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,8 +35,8 @@ public class GameManager : MonoBehaviour
     private GameObject levelImageB;
 
     private GameObject objWin;
-    public GameObject heartParent;
-    public int heartCount = 3;
+    GameObject heartParent, Home;
+    int heartCount;
 
     private void Start()
     {
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviour
         {
             UnityEngine.Object.Destroy(base.gameObject);
         }
+
     }
 
     private void LoadLevel()
@@ -209,6 +212,10 @@ public class GameManager : MonoBehaviour
             transform2.localScale = new Vector3(x2, y2, localScale3.z);
         }
         // GameObject.Find("LevelText").GetComponent<TextMeshPro>().text = (level + 1).ToString();
+        heartParent = GameObject.Find("Hearts");
+        Home = GameObject.Find("Home");
+        Home.GetComponent<Button>().onClick.AddListener(GoToHome);
+        heartCount = 3;
     }
 
     public void PointCheck()
@@ -259,6 +266,22 @@ public class GameManager : MonoBehaviour
         }
         touchCounter++;
         MonoBehaviour.print("touchCounter = " + touchCounter);
+        if (Point.isoverobject)
+        {
+            Debug.Log(" over object");
+            Point.isoverobject = false;
+        }
+        else if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            Debug.Log("wrong touch not over object");
+            heartParent.transform.GetChild(heartCount - 1).gameObject.SetActive(false);
+            heartCount--;
+
+        }
+        if (heartCount <= 0)
+        {
+            Debug.Log("Game End: Lost");
+        }
         if (touchCounter > 8)
         {
             if (levelStars > 0)

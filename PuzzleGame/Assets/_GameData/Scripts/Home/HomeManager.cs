@@ -80,6 +80,10 @@ public class HomeManager : MonoBehaviour
     }
     public void onSettingsClick()
     {
+        if (AdNetwork.instance.isInterstitialReady)
+        {
+            AdNetwork.instance.showInterstitialAd();
+        }
         // if (AdMobManager.instance.isInterstitialReady)
         // { AdMobManager.instance.ShowInterstitial(); }
         // else

@@ -24,6 +24,7 @@ public class BtnHint : MonoBehaviour
     {
         if (enable)
         {
+            Point.isoverobject = true;
             power = UnityEngine.Random.Range(0, 4);
             base.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
             Sound.REF.Play("sndClick");
