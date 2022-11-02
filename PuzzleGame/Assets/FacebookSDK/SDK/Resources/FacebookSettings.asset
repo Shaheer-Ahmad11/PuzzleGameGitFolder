@@ -18,7 +18,7 @@ MonoBehaviour:
   appIds:
   - 5516182595140612
   appLabels:
-  - App Name
+  - PuzzleGame
   cookie: 1
   logging: 1
   status: 1

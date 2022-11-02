@@ -4,9 +4,18 @@ using UnityEngine;
 using Facebook.Unity;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using PlayFab;
+using PlayFab.ClientModels;
 
 public class FacebookLoginExp : MonoBehaviour
 {
+    public Button fb;
+    public Text FB_userName;
+    public Image FB_userDp;
+    bool isName, isPic;
+    [Header("PlayFab app id")]
+    public string titleId;
+    public static int puzzlelevel, differencelevel, matchingcards;
     void Awake()
     {
 
@@ -20,6 +29,10 @@ public class FacebookLoginExp : MonoBehaviour
             // Already initialized, signal an app activation App Event
             FB.ActivateApp();
         }
+    }
+    private void Start()
+    {
+        StartCoroutine(checkLogin());
     }
     private void InitCallback()
     {
@@ -36,10 +49,7 @@ public class FacebookLoginExp : MonoBehaviour
             Debug.Log("Failed to Initialize the Facebook SDK");
         }
     }
-    private void Start()
-    {
-        StartCoroutine(checkLogin());
-    }
+
     private void OnHideUnity(bool isGameShown)
     {
         if (!isGameShown)
@@ -53,23 +63,24 @@ public class FacebookLoginExp : MonoBehaviour
             Time.timeScale = 1;
         }
     }
-    public Button fb;
+
     public void onClickLogin()
     {
         var perms = new List<string>() { "public_profile", "email" };
         FB.LogInWithReadPermissions(perms, AuthCallback);
 
     }
+
     void DealWithFbMenus(bool isLoggedIn)
     {
+        //get UserName and profile picture from facebook
         if (isLoggedIn)
         {
             FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
             FB.API("/me/picture?type=med", HttpMethod.GET, DisplayProfilePic);
         }
     }
-    public Text FB_userName;
-    bool isName, isPic;
+
     void DisplayUsername(IResult result)
     {
         if (result.Error == null)
@@ -86,7 +97,7 @@ public class FacebookLoginExp : MonoBehaviour
             Debug.Log(result.Error);
         }
     }
-    public Image FB_userDp;
+
     void DisplayProfilePic(IGraphResult result)
     {
         if (result.Error == null)
@@ -118,13 +129,25 @@ public class FacebookLoginExp : MonoBehaviour
             {
                 Debug.Log(perm);
             }
-
         }
         else
         {
-            Debug.Log("User cancelled login");
-
+            Debug.Log(result.Error + " :User cancelled login");
         }
+        PlayFabClientAPI.LoginWithFacebook(new PlayFab.ClientModels.LoginWithFacebookRequest
+        {
+            TitleId = titleId,
+            AccessToken = AccessToken.CurrentAccessToken.TokenString,
+            CreateAccount = true
+        }, playfabloginsuccess, playfabloginfailed);
+    }
+    void playfabloginsuccess(PlayFab.ClientModels.LoginResult result)
+    {
+        Debug.Log(result + " PlayFab Login Success");
+    }
+    void playfabloginfailed(PlayFabError error)
+    {
+        Debug.Log(error.ErrorMessage + " failed");
     }
     IEnumerator checkLogin()
     {
@@ -134,6 +157,36 @@ public class FacebookLoginExp : MonoBehaviour
         {
             StartCoroutine(checkLogin());
         }
+    }
+    public void getDataFromPlayFab()
+    {
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest(), onDataRecived, playfabloginfailed);
+
+    }
+    void onDataRecived(GetUserDataResult result)
+    {
+        Debug.Log(result + ": Data Recived Success");
+        if (result.Data != null && result.Data.ContainsKey("puzzleLevel"))
+        {
+            Debug.Log("Puzzle Level = " + result.Data["puzzleLevel"].Value);
+        }
+    }
+    public void saveDatatoPlayFab()
+    {
+        var request = new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string>
+            {
+                //write your data here
+                {"puzzleLevel", "5"}
+
+    }
+        };
+        PlayFabClientAPI.UpdateUserData(request, OnDataSend, playfabloginfailed);
+    }
+    void OnDataSend(UpdateUserDataResult result)
+    {
+        Debug.Log(result + " Data Sent Success");
     }
     private void Update()
     {
