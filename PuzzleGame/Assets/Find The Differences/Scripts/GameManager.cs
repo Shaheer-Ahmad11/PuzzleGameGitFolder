@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -37,6 +38,10 @@ public class GameManager : MonoBehaviour
     private GameObject objWin;
     GameObject heartParent, Home;
     int heartCount;
+    public GameObject winPanel;
+    private string[] GObjs = { "btnHint", "Images", "UI Remaining" };
+    public GameObject[] GObjsList = new GameObject[3];
+    public GameObject pointsPanel;
 
     private void Start()
     {
@@ -212,7 +217,14 @@ public class GameManager : MonoBehaviour
             transform2.localScale = new Vector3(x2, y2, localScale3.z);
         }
         // GameObject.Find("LevelText").GetComponent<TextMeshPro>().text = (level + 1).ToString();
+        for (int i = 0; i < 3; i++)
+        {
+            GObjsList[i] = GameObject.Find(GObjs[i]);
+        }
+        pointsPanel = GameObject.FindWithTag("PointsPanel");
+
         heartParent = GameObject.Find("Hearts");
+        winPanel = heartParent.transform.parent.transform.GetChild(5).gameObject;
         Home = GameObject.Find("Home");
         Home.GetComponent<Button>().onClick.AddListener(GoToHome);
         heartCount = 3;
@@ -232,7 +244,13 @@ public class GameManager : MonoBehaviour
     private void GameWin()
     {
         Sound.REF.PlayMusic("sndMusicMain");
-        objWin.SetActive(value: true);
+        for (int i = 0; i < GObjsList.Length; i++)
+        {
+            GObjsList[i].SetActive(false);
+        }
+        pointsPanel.SetActive(false);
+        winPanel.SetActive(true);
+        // objWin.SetActive(value: true);
         MonoBehaviour.print("You Win!");
         float time = 7f;
         if (debugMod)

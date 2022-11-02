@@ -468,7 +468,7 @@ GameObject:
   - component: {fileID: 1790554077270267637}
   m_Layer: 0
   m_Name: PointsPanel003
-  m_TagString: 
+  m_TagString: PointsPanel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

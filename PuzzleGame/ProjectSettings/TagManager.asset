@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PointSpot
   - image
+  - PointsPanel
   layers:
   - Default
   - TransparentFX
