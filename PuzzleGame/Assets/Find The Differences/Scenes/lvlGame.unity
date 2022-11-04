@@ -773,7 +773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4056604, g: 0.30807227, b: 0.30807227, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -848,7 +848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4056604, g: 0.30807227, b: 0.30807227, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1068,7 +1068,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.85300004, y: 0.011000001}
   m_AnchorMax: {x: 0.98, y: 0.072515644}
-  m_AnchoredPosition: {x: 0.08001709, y: -0.5998535}
+  m_AnchoredPosition: {x: 0.08001709, y: 56}
   m_SizeDelta: {x: -0.52000046, y: -0.45000076}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!58 &949324216
@@ -1733,7 +1733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4056604, g: 0.30807227, b: 0.30807227, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2838,7 +2838,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790554073730271297}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15, y: -7.301, z: 0}
+  m_LocalPosition: {x: -0.15, y: -6.894, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1914140185}
@@ -4444,16 +4444,18 @@ MonoBehaviour:
   debugMod: 0
   debugJumpToLevel: -1
   images:
-  - {fileID: 21300000, guid: 36bc80321cdf43f194ea53ac8f961c1b, type: 3}
-  - {fileID: 21300000, guid: e4879a20d15e40f4b3e64f1b3883d203, type: 3}
-  - {fileID: 21300000, guid: 31fc653375b3433286679ca4a1d138d5, type: 3}
-  - {fileID: 21300000, guid: 8393fb0f75084012a37943f45d5faec2, type: 3}
-  - {fileID: 21300000, guid: 4dc4349d121842c19f6da7e8642ce800, type: 3}
-  - {fileID: 21300000, guid: 2a72e50faabf4430be12a6f9d272a970, type: 3}
-  - {fileID: 21300000, guid: eac6e639eb104b219de8f263e5fb2dae, type: 3}
-  - {fileID: 21300000, guid: 7d5680e5a9db4baeace529589647e1ae, type: 3}
-  - {fileID: 21300000, guid: a8373c819a8e4e959e6db323a4052363, type: 3}
-  - {fileID: 21300000, guid: 77d09ddb54664c60b15c6b02ee804b27, type: 3}
+  - {fileID: 21300000, guid: bbae191b17114814c9f69f329f82e0f5, type: 3}
+  - {fileID: 21300000, guid: c604baf6912b4fc4aad1af4ebd8478a1, type: 3}
+  - {fileID: 21300000, guid: eaeb41dfc7a85014abe0c89632af7811, type: 3}
+  - {fileID: 21300000, guid: e887bf7b26cd8be41a7a75744ee70602, type: 3}
+  - {fileID: 21300000, guid: 6d49657729ad66c4ca407a1453d53808, type: 3}
+  - {fileID: 21300000, guid: 7722e17bc88d6584fb6d8281254edbb9, type: 3}
+  - {fileID: 21300000, guid: ad1642de9e8d48c4c95d42d338b01b26, type: 3}
+  - {fileID: 21300000, guid: 23bc0de46774f68459cc9cb70c90d04e, type: 3}
+  - {fileID: 21300000, guid: 54f43b07929ecfb4393a03b3652acbc2, type: 3}
+  - {fileID: 21300000, guid: 0d0e84b45e1a8d94ba089f8e6d9a55a4, type: 3}
+  - {fileID: 21300000, guid: ec5a3b94458ca124f9cb31329f0d0c31, type: 3}
+  - {fileID: 21300000, guid: 801dc4628d74a44419ea52fd70621379, type: 3}
   spRemainingUICheck: {fileID: -5304629016971282080, guid: 6e271181abb2bdb42b6999b90799d078, type: 3}
   spWinStar: {fileID: 21300000, guid: c79d72a506da48bb84fae6ea93b6b7ce, type: 3}
   pointsPanelList:
@@ -4461,6 +4463,7 @@ MonoBehaviour:
   - {fileID: 1790554073730271930, guid: 7309963dce0347999a39bd927f6d8633, type: 3}
   - {fileID: 1790554073730272121, guid: b8f72722902a4dc8b76a63c224cb08d9, type: 3}
   - {fileID: 1790554073730271974, guid: e3193ff6f39a4eaeb6e065ae1128cd54, type: 3}
+  - {fileID: 1790554073730272514, guid: 7423e7a73b724366a538f2919b3b036e, type: 3}
   - {fileID: 1790554073730272514, guid: 7423e7a73b724366a538f2919b3b036e, type: 3}
   GObjsList:
   - {fileID: 0}

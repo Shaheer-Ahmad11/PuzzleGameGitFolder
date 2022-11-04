@@ -21,6 +21,16 @@ public class HomeManager : MonoBehaviour
     }
     private void Start()
     {
+        _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
+        _currentDifferenceLevel = PlayerPrefs.GetInt("level") + 1;
+        if (_currentPuzzleLevel > totalPuzzleLevels)
+        {
+            _currentPuzzleLevel = 1;
+        }
+        if (_currentDifferenceLevel > totalDifferenceLevels)
+        {
+            _currentDifferenceLevel = 1;
+        }
         if (!PlayerPrefs.HasKey("Sound"))
         {
             PlayerPrefs.SetInt("Sound", 1);
@@ -53,8 +63,8 @@ public class HomeManager : MonoBehaviour
             vibrationButton.transform.GetChild(0).gameObject.SetActive(true);
             vibrationButton.transform.GetChild(1).gameObject.SetActive(false);
         }
-        loadPuzzleLevels();
-        loadDifferenceLevel();
+        // loadPuzzleLevels();
+        // loadDifferenceLevel();
     }
     public void onPuzzleButonClick()
     {
@@ -101,8 +111,9 @@ public class HomeManager : MonoBehaviour
         // }
     }
 
-    void loadPuzzleLevels()
+    public void loadPuzzleLevels()
     {
+        _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
         for (int i = 1; i <= totalPuzzleLevels; i++)
         {
             GameObject puzzlelevelbutton = Instantiate(LevelSelectButtonPrefab, puzzleLevelPanel);
@@ -110,6 +121,10 @@ public class HomeManager : MonoBehaviour
             Sprite puzzleimage = Resources.Load<Sprite>("Puzzle/" + i);
             puzzlelevelbutton.transform.GetChild(0).GetComponent<Image>().sprite = puzzleimage;
             puzzlelevelbutton.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(loadPuzzleLevelScene);
+            if (i == _currentPuzzleLevel)
+            {
+                puzzlelevelbutton.transform.GetChild(3).gameObject.SetActive(false);
+            }
             if (i < _currentPuzzleLevel)
             {
                 puzzlelevelbutton.transform.GetChild(1).gameObject.SetActive(false);
@@ -125,6 +140,8 @@ public class HomeManager : MonoBehaviour
     }
     public void loadDifferenceLevel()
     {
+        _currentDifferenceLevel = PlayerPrefs.GetInt("level") + 1;
+        Debug.Log(_currentDifferenceLevel);
         for (int i = 1; i <= totalDifferenceLevels; i++)
         {
             GameObject differencelevelbutton = Instantiate(LevelSelectButtonPrefab, differenceLevelPanel);

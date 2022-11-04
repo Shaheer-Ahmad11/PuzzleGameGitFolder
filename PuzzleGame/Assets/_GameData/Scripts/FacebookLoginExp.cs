@@ -42,13 +42,14 @@ public class FacebookLoginExp : MonoBehaviour
     }
     private void Start()
     {
+        // PlayerPrefs.DeleteAll();
         if (!PlayerPrefs.HasKey("puzzlelevel"))
         {
             PlayerPrefs.SetInt("puzzlelevel", 1);
         }
-        if (!PlayerPrefs.HasKey("differencelevel"))
+        if (!PlayerPrefs.HasKey("level"))
         {
-            PlayerPrefs.SetInt("differencelevel", 1);
+            PlayerPrefs.SetInt("level", 1);
         }
         if (!FB.IsLoggedIn)
         {
@@ -222,7 +223,7 @@ public class FacebookLoginExp : MonoBehaviour
         if (result.Data != null && result.Data.ContainsKey("currentPuzzleLevel") && result.Data.ContainsKey("currentDifferenceLecel"))
         {
             Debug.Log("Puzzle Level = " + result.Data["currentPuzzleLevel"].Value);
-            Debug.Log("Puzzle Level = " + result.Data["currentDifferenceLecel"].Value);
+            Debug.Log("difference Level = " + result.Data["currentDifferenceLecel"].Value);
             HomeManager.instance._currentPuzzleLevel = int.Parse(result.Data["currentPuzzleLevel"].Value);
             HomeManager.instance._currentDifferenceLevel = int.Parse(result.Data["currentDifferenceLecel"].Value);
             if (PlayerPrefs.GetInt("puzzlelevel") > HomeManager.instance._currentPuzzleLevel)
@@ -230,14 +231,14 @@ public class FacebookLoginExp : MonoBehaviour
                 HomeManager.instance._currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
                 saveDatatoPlayFab();
             }
-            if (PlayerPrefs.GetInt("differencelevel") > HomeManager.instance._currentDifferenceLevel)
+            if (PlayerPrefs.GetInt("level") > HomeManager.instance._currentDifferenceLevel)
             {
-                HomeManager.instance._currentDifferenceLevel = PlayerPrefs.GetInt("differencelevel");
+                HomeManager.instance._currentDifferenceLevel = PlayerPrefs.GetInt("level");
                 saveDatatoPlayFab();
             }
             {
                 PlayerPrefs.SetInt("puzzlelevel", HomeManager.instance._currentPuzzleLevel);
-                PlayerPrefs.SetInt("differencelevel", HomeManager.instance._currentDifferenceLevel);
+                PlayerPrefs.SetInt("level", HomeManager.instance._currentDifferenceLevel);
             }
             if (!alreadyLoaded)
             {
@@ -261,7 +262,7 @@ public class FacebookLoginExp : MonoBehaviour
             {
                 //write your data here
                 {"currentPuzzleLevel", (PlayerPrefs.GetInt("puzzlelevel").ToString()) },
-                {"currentDifferenceLecel",(PlayerPrefs.GetInt("differencelevel").ToString())}
+                {"currentDifferenceLecel",(PlayerPrefs.GetInt("level").ToString())}
 
     }
         };

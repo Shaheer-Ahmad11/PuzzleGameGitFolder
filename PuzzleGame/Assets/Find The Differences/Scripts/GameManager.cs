@@ -278,7 +278,21 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("lvlGame");
     }
 
+    public static bool IsPointerOverGameObject()
+    {
+        //check mouse
+        if (EventSystem.current.IsPointerOverGameObject())
+            return true;
+        //check touch
+        if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
+        {
+            if (EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId) && EventSystem.current.currentSelectedGameObject != null)
+                // if (EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId))
+                return true;
+        }
 
+        return false;
+    }
 
     private void Update()
     {
@@ -293,13 +307,24 @@ public class GameManager : MonoBehaviour
             Debug.Log(" over object");
             Point.isoverobject = false;
         }
-        else if (!EventSystem.current.IsPointerOverGameObject())
+
+        else if (!Point.isoverobject && !IsPointerOverGameObject())
         {
+
             Debug.Log("wrong touch not over object");
             heartParent.transform.GetChild(heartCount - 1).gameObject.SetActive(false);
             heartCount--;
 
+
+
         }
+        // else if (!EventSystem.current.IsPointerOverGameObject())
+        // {
+        //     Debug.Log("wrong touch not over object");
+        //     heartParent.transform.GetChild(heartCount - 1).gameObject.SetActive(false);
+        //     heartCount--;
+        // }
+
         if (heartCount <= 0)
         {
             // for (int i = 0; i < GObjsList.Length; i++)

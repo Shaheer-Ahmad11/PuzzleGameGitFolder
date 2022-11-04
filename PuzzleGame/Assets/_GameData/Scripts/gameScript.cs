@@ -2,21 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class gameScript : MonoBehaviour
 {
     [SerializeField] private Transform emptySpace = null;
     private Camera _camera;
     [SerializeField] private tileScript[] tiles;
-    private int emptySpaceIndex = 8;
+    private int emptySpaceIndex = 8, currentlevel;
+    public Sprite[] alltiles;
+    private Sprite currentimage;
+    public Image tagretImage;
     public GameObject panel;
     public Animator animator;
+    bool win;
     void Start()
     {
+        currentlevel = PlayerPrefs.GetInt("puzzlelevel");
 
         _camera = Camera.main;
         shuffle();
-
+        alltiles = Resources.LoadAll<Sprite>("Puzzle/puzzlecopy/" + currentlevel);
+        currentimage = Resources.Load<Sprite>("Puzzle/" + currentlevel);
+        for (int i = 0; i < alltiles.Length - 1; i++)
+        {
+            gameObject.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = alltiles[i];
+        }
+        tagretImage.sprite = currentimage;
     }
 
     void Update()
@@ -63,6 +75,7 @@ public class gameScript : MonoBehaviour
             //    var a= GetComponent<timerScript>();
             //    a.StopTImer();
             timerScript.instance.StopTImer();
+
             StartCoroutine(waiting());
 
 
@@ -144,10 +157,31 @@ public class gameScript : MonoBehaviour
     {
         // yield return new WaitForSeconds(1f);
         // animator.SetTrigger("new");
-        yield return new WaitForSeconds(1f);
-        panel.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (!win)
+        {
+            win = true;
+            yield return new WaitForSeconds(1f);
+            panel.SetActive(true);
+            currentlevel++;
+            Debug.Log(currentlevel);
+
+            if (currentlevel > HomeManager.instance.totalPuzzleLevels)
+            {
+                currentlevel = 1;
+            }
+            PlayerPrefs.SetInt("puzzlelevel", currentlevel);
+            yield return new WaitForSeconds(2f);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            if (Random.Range(0, 3) == 1)
+            {
+                if (AdNetwork.instance.isInterstitialReady)
+                { AdNetwork.instance.showInterstitialAd(); }
+            }
+            if (FacebookLoginExp.Instance.isLoggedin)
+            {
+                FacebookLoginExp.Instance.saveDatatoPlayFab();
+            }
+        }
     }
 
 }
