@@ -36,9 +36,11 @@ public class GameManager : MonoBehaviour
     private GameObject levelImageB;
 
     private GameObject objWin;
-    GameObject heartParent, Home;
+    GameObject heartParent, Home, restartLevel, cancleLevel;
+
     int heartCount;
-    public GameObject winPanel;
+    private GameObject winPanel;
+    private GameObject restartPanel;
     private string[] GObjs = { "btnHint", "Images", "UI Remaining" };
     public GameObject[] GObjsList = new GameObject[3];
     public GameObject pointsPanel;
@@ -225,8 +227,10 @@ public class GameManager : MonoBehaviour
 
         heartParent = GameObject.Find("Hearts");
         winPanel = heartParent.transform.parent.transform.GetChild(5).gameObject;
+        restartPanel = heartParent.transform.parent.transform.GetChild(6).gameObject;
         Home = GameObject.Find("Home");
         Home.GetComponent<Button>().onClick.AddListener(GoToHome);
+
         heartCount = 3;
     }
 
@@ -252,7 +256,7 @@ public class GameManager : MonoBehaviour
         winPanel.SetActive(true);
         // objWin.SetActive(value: true);
         MonoBehaviour.print("You Win!");
-        float time = 7f;
+        float time = 6f;
         if (debugMod)
         {
             time = 1f;
@@ -298,6 +302,17 @@ public class GameManager : MonoBehaviour
         }
         if (heartCount <= 0)
         {
+            // for (int i = 0; i < GObjsList.Length; i++)
+            // {
+            //     GObjsList[i].SetActive(false);
+            // }
+            // pointsPanel.SetActive(false);
+            // restartPanel.SetActive(true);
+            // restartLevel = GameObject.Find("RestartLevel");
+            // restartLevel.GetComponent<Button>().onClick.AddListener(RestartLevel);
+            // cancleLevel = GameObject.Find("CancleLevel");
+            // cancleLevel.GetComponent<Button>().onClick.AddListener(GoToHome);
+            GoToHome();
             Debug.Log("Game End: Lost");
         }
         if (touchCounter > 8)
@@ -314,5 +329,10 @@ public class GameManager : MonoBehaviour
     public void GoToHome()
     {
         SceneManager.LoadScene("Home");
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene("lvlGame");
     }
 }

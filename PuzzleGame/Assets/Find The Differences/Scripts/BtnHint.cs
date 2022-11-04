@@ -13,17 +13,32 @@ public class BtnHint : MonoBehaviour
     public Sprite spPowerMod;
 
     private static float hintTime;
+    private int hintCount = 0;
 
     private void Start()
     {
         hintSpot = GameObject.Find("HintSpot");
-        hintTime = 10f;
+        hintTime = 6f;
+    }
+    private void FixedUpdate()
+    {
+        if (hintCount == 2)
+        {
+            gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        }
     }
 
     private void OnMouseUp()
     {
         if (enable)
         {
+            // if (hintCount == 2)
+            {
+                // if (AdNetwork.instance.isRewardedVideoAvailable)
+                // {
+                //     Debug.Log("rewarded ready11");
+                // }
+            }
             Point.isoverobject = true;
             power = UnityEngine.Random.Range(0, 4);
             base.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
@@ -36,6 +51,8 @@ public class BtnHint : MonoBehaviour
 
     private void ShowHint()
     {
+        hintCount++;
+
         hintSpot.GetComponent<Animator>().Play("animFadeIn");
         base.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
         base.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.2f);
@@ -70,12 +87,13 @@ public class BtnHint : MonoBehaviour
             num++;
         }
         Invoke("EnableHint", hintTime);
-        hintTime += 5f;
+        // hintTime += 5f;
     }
 
     private void EnableHint()
     {
         enable = true;
         base.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+
     }
 }
