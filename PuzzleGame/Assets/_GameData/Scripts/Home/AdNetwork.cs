@@ -189,16 +189,23 @@ public class AdNetwork : MonoBehaviour
     {
         Debug.Log("unity-script: I got RewardedVideoAdRewardedEvent, amount = " + ssp.getRewardAmount() + " name = " + ssp.getRewardName());
         givereward = true;
-        if (givereward)
+        if (givereward && BtnHint.instance.ishint)
         {
-            // MainUiHandler.Instance.e.SetActive(false);
+            BtnHint.instance.callshowhint();
+            BtnHint.instance.ishint = false;
         }
     }
 
     void RewardedVideoAdClosedEvent()
     {
         Debug.Log("unity-script: I got RewardedVideoAdClosedEvent");
-        givereward = false;
+        if (givereward && BtnHint.instance.ishint)
+        {
+            BtnHint.instance.callshowhint();
+            BtnHint.instance.ishint = false;
+            givereward = false;
+        }
+
     }
     void RewardedVideoAvailabilityChangedEvent(bool canShowAd)
     {

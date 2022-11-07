@@ -241,7 +241,7 @@ public class GameManager : MonoBehaviour
         {
             Invoke("GameWin", 0.5f);
         }
-        GameObject.Find("RemainingUI" + (4 - remainingPoints)).GetComponent<SpriteRenderer>().sprite = spRemainingUICheck;
+        GameObject.Find("RemainingUI" + (4 - remainingPoints)).GetComponent<Image>().sprite = spRemainingUICheck;
         MonoBehaviour.print("PointCheck() - RemainingPoints are " + remainingPoints);
     }
 
@@ -308,7 +308,7 @@ public class GameManager : MonoBehaviour
             Point.isoverobject = false;
         }
 
-        else if (!Point.isoverobject && !IsPointerOverGameObject())
+        else if (!Point.isoverobject)
         {
 
             Debug.Log("wrong touch not over object");

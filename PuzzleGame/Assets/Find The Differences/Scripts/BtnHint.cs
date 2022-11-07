@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BtnHint : MonoBehaviour
 {
     private GameObject hintSpot;
-
+    public static BtnHint instance;
+    public bool ishint;
     private bool enable = true;
 
     private int power;
@@ -19,43 +21,75 @@ public class BtnHint : MonoBehaviour
     {
         hintSpot = GameObject.Find("HintSpot");
         hintTime = 6f;
+        transform.GetChild(0).gameObject.SetActive(false);
     }
     private void FixedUpdate()
     {
-        if (hintCount == 2)
+        if (hintCount >= 1)
         {
-            gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            if (AdNetwork.instance.isRewardedVideoAvailable)
+            {
+                GetComponent<Button>().interactable = true;
+                gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            }
+            else
+            {
+                GetComponent<Button>().interactable = false;
+            }
         }
+
     }
 
-    private void OnMouseUp()
+    public void Onhintbutttonclick()
     {
+        Point.isoverobject = true;
         if (enable)
         {
-            // if (hintCount == 2)
+            if (hintCount >= 1)
             {
-                // if (AdNetwork.instance.isRewardedVideoAvailable)
-                // {
-                //     Debug.Log("rewarded ready11");
-                // }
+                if (AdNetwork.instance.isRewardedVideoAvailable)
+                {
+                    AdNetwork.instance.showRewardedVideoAd();
+                    ishint = true;
+                }
             }
-            Point.isoverobject = true;
-            power = UnityEngine.Random.Range(0, 4);
-            base.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
-            Sound.REF.Play("sndClick");
-            Invoke("ShowHint", 0.3f);
-            Sound.REF.Play("sndHint");
-            enable = false;
+            else
+            {
+                callshowhint();
+                // power = UnityEngine.Random.Range(0, 4);
+                // base.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+                // Sound.REF.Play("sndClick");
+                // Invoke("ShowHint", 0.3f);
+                // Sound.REF.Play("sndHint");
+                // enable = false;
+            }
+            // if (AdNetwork.instance.givereward)
+            // {
+            //     power = UnityEngine.Random.Range(0, 4);
+            //     base.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+            //     Sound.REF.Play("sndClick");
+            //     Invoke("ShowHint", 0.3f);
+            //     Sound.REF.Play("sndHint");
+            //     enable = false;
+            // }
         }
     }
-
+    public void callshowhint()
+    {
+        power = UnityEngine.Random.Range(0, 4);
+        base.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+        Sound.REF.Play("sndClick");
+        Invoke("ShowHint", 0.3f);
+        Sound.REF.Play("sndHint");
+        enable = false;
+    }
     private void ShowHint()
     {
         hintCount++;
 
         hintSpot.GetComponent<Animator>().Play("animFadeIn");
-        base.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
-        base.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.2f);
+        // base.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        // base.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.2f);
         GameObject[] array = GameObject.FindGameObjectsWithTag("PointSpot");
         int num = 0;
         int num2 = UnityEngine.Random.Range(0, array.Length);

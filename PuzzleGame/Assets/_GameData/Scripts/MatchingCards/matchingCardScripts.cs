@@ -7,23 +7,62 @@ using UnityEngine.UI;
 
 public class matchingCardScripts : MonoBehaviour
 {
-
+    public Color[] tilescolor;
     public Sprite[] hiddenImages;
+    public Transform topscore;
     [SerializeField] int totalCards;
     [SerializeField] Transform CardsPlacing;
-    public GameObject cardsPrefab;
-    public Sprite startImage;
+    public GameObject cardsPrefab, questiomarkprefab;
+    public Sprite startImage, tikimage;
     List<int> cardsNumbers = new List<int>();
-    private int clickedIndex, currentClickedNumber, totalMoves, TotalScored;
+    private int clickedIndex, currentClickedNumber, totalMoves, TotalScored, currentcardslevel;
     private GameObject firstCard, secondCard;
     public GameObject winpanel;
     public Text MovesText, ScoreText;
     bool win;
     void Start()
     {
+        {
+            if (!PlayerPrefs.HasKey("cardslevel"))
+            {
+                PlayerPrefs.SetInt("cardslevel", 1);
+            }
+            else
+            {
+                currentcardslevel = PlayerPrefs.GetInt("cardslevel");
+            }
+            if (!PlayerPrefs.HasKey("totalcard"))
+            {
+                PlayerPrefs.SetInt("totalcard", 12);
+            }
+
+            totalCards = PlayerPrefs.GetInt("totalcard", totalCards);
+            if (totalCards < 12 && currentcardslevel < 12)
+            {
+                totalCards = 12;
+                PlayerPrefs.SetInt("totalcard", totalCards);
+            }
+            else if (currentcardslevel % 4 == 0)
+            {
+                totalCards = currentcardslevel;
+                PlayerPrefs.SetInt("totalcard", totalCards);
+            }
+            else
+            {
+                totalCards = totalCards;
+            }
+        }
+        for (int i = 0; i < totalCards / 2; i++)
+        {
+            Instantiate(questiomarkprefab, topscore);
+        }
         for (int i = 0; i < totalCards; i++)
         {
             GameObject card = Instantiate(cardsPrefab, CardsPlacing);
+
+
+
+
             int cardnumber;
             if (i < totalCards / 2)
             {
@@ -32,29 +71,49 @@ public class matchingCardScripts : MonoBehaviour
             }
             else
             {
-
                 int tempnum = Random.Range(0, cardsNumbers.Count);
-
                 cardnumber = cardsNumbers[tempnum];
                 cardsNumbers.RemoveAt(tempnum);
             }
-
+            changetilecolor(i);
             card.name = cardnumber.ToString();
             card.GetComponent<Button>().onClick.AddListener(onCardClick);
+            card.GetComponent<Button>().interactable = false;
 
         }
         Invoke("flipAll", 1f);
         Invoke("flipBackAll", 3f);
     }
+    int tileindex = 0;
+    void changetilecolor(int index)
+    {
 
 
+        if (tileindex <= 3)
+        {
+            CardsPlacing.GetChild(index).gameObject.GetComponent<Image>().color = tilescolor[0];
+            Debug.Log((tileindex));
+            tileindex++;
+
+        }
+        else if (tileindex <= 8)
+        {
+            CardsPlacing.GetChild(index).gameObject.GetComponent<Image>().color = tilescolor[1];
+            tileindex++;
+        }
+        if (tileindex >= 8)
+        {
+            tileindex = 0;
+        }
+    }
     void Update()
     {
-        if (clickedIndex == 2)
+        if (clickedIndex >= 2)
         {
             if (firstCard.name == secondCard.name)
             {
                 TotalScored++;
+                topscore.GetChild(TotalScored - 1).GetComponent<Image>().sprite = tikimage;
                 ScoreText.text = "Score = " + TotalScored;
                 StartCoroutine(offMatchedCards());
             }
@@ -73,13 +132,17 @@ public class matchingCardScripts : MonoBehaviour
     }
     private IEnumerator nextLevel()
     {
+        currentcardslevel++;
+        PlayerPrefs.SetInt("cardslevl", currentcardslevel);
         yield return new WaitForSeconds(1f);
+        topscore.gameObject.SetActive(false);
         winpanel.SetActive(true);
+
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void onCardClick()
-    {//perform action when press on card
+    {  //perform action when press on card
         if (CardsPlacing.GetComponent<GridLayoutGroup>().enabled == true)
         {
             CardsPlacing.GetComponent<GridLayoutGroup>().enabled = false;
@@ -97,7 +160,7 @@ public class matchingCardScripts : MonoBehaviour
             firstCard = EventSystem.current.currentSelectedGameObject;
             firstCard.GetComponent<Button>().interactable = false;
         }
-        else if (clickedIndex == 2)
+        else if (clickedIndex >= 2)
         {
             secondCard = EventSystem.current.currentSelectedGameObject;
             secondCard.GetComponent<Button>().interactable = false;
@@ -121,10 +184,12 @@ public class matchingCardScripts : MonoBehaviour
 
     }
     private IEnumerator offMatchedCards()
-    {//runs when tow cards matches
+    {
+        //runs when tow cards matches
+
         yield return new WaitForSeconds(1f);
-        firstCard.SetActive(false);
-        secondCard.SetActive(false);
+        firstCard.GetComponent<Button>().enabled = false;
+        secondCard.GetComponent<Button>().enabled = false;
         enableClick(true);
 
     }
@@ -142,15 +207,17 @@ public class matchingCardScripts : MonoBehaviour
             GameObject tempcurrentCard = CardsPlacing.GetChild(i).gameObject;
             int tempIndex = int.Parse(tempcurrentCard.name);
             tempcurrentCard.transform.GetChild(0).GetComponent<Image>().sprite = hiddenImages[tempIndex];
+            // tempcurrentCard.GetComponent<Button>().interactable = false;
         }
     }
     public void flipBackAll()
-    {//flip back all cards
+    { //flip back all cards
         for (int i = 0; i < CardsPlacing.childCount; i++)
         {
             GameObject tempcurrentCard = CardsPlacing.GetChild(i).gameObject;
             int tempIndex = int.Parse(tempcurrentCard.name);
             tempcurrentCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
+            tempcurrentCard.GetComponent<Button>().interactable = true;
         }
     }
     public void onBackBtnClick()
