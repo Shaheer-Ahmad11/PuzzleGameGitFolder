@@ -11,7 +11,7 @@ public class matchingCardScripts : MonoBehaviour
     public Sprite[] hiddenImages;
     public Transform topscore;
     [SerializeField] int totalCards;
-    [SerializeField] Transform CardsPlacing;
+    [SerializeField] Transform CardsPlacing, Solved;
     public GameObject cardsPrefab, questiomarkprefab;
     public Sprite startImage, tikimage;
     List<int> cardsNumbers = new List<int>();
@@ -30,26 +30,34 @@ public class matchingCardScripts : MonoBehaviour
             else
             {
                 currentcardslevel = PlayerPrefs.GetInt("cardslevel");
+
+                Debug.Log("current level =" + currentcardslevel);
             }
             if (!PlayerPrefs.HasKey("totalcard"))
             {
-                PlayerPrefs.SetInt("totalcard", 12);
+                PlayerPrefs.SetInt("totalcard", 24);
             }
 
             totalCards = PlayerPrefs.GetInt("totalcard", totalCards);
-            if (totalCards < 12 && currentcardslevel < 12)
+
+            if (totalCards < 24 && currentcardslevel < 4)
             {
-                totalCards = 12;
+                totalCards = 24;
                 PlayerPrefs.SetInt("totalcard", totalCards);
             }
-            else if (currentcardslevel % 4 == 0)
+            else if (currentcardslevel % 5 == 0 && currentcardslevel != PlayerPrefs.GetInt("prevlevel"))
             {
-                totalCards = currentcardslevel;
+                totalCards += 6;
                 PlayerPrefs.SetInt("totalcard", totalCards);
             }
             else
             {
                 totalCards = totalCards;
+            }
+            PlayerPrefs.SetInt("prevlevel", currentcardslevel);
+            if (totalCards >= 72)
+            {
+                totalCards = 72;
             }
         }
         for (int i = 0; i < totalCards / 2; i++)
@@ -59,10 +67,6 @@ public class matchingCardScripts : MonoBehaviour
         for (int i = 0; i < totalCards; i++)
         {
             GameObject card = Instantiate(cardsPrefab, CardsPlacing);
-
-
-
-
             int cardnumber;
             if (i < totalCards / 2)
             {
@@ -82,26 +86,26 @@ public class matchingCardScripts : MonoBehaviour
 
         }
         Invoke("flipAll", 1f);
-        Invoke("flipBackAll", 3f);
+
     }
     int tileindex = 0;
     void changetilecolor(int index)
     {
 
 
-        if (tileindex <= 3)
+        if (tileindex <= 5)
         {
             CardsPlacing.GetChild(index).gameObject.GetComponent<Image>().color = tilescolor[0];
-            Debug.Log((tileindex));
+
             tileindex++;
 
         }
-        else if (tileindex <= 8)
+        else if (tileindex <= 12)
         {
             CardsPlacing.GetChild(index).gameObject.GetComponent<Image>().color = tilescolor[1];
             tileindex++;
         }
-        if (tileindex >= 8)
+        if (tileindex >= 12)
         {
             tileindex = 0;
         }
@@ -132,8 +136,10 @@ public class matchingCardScripts : MonoBehaviour
     }
     private IEnumerator nextLevel()
     {
+        CoinManager.instance.Add(50);
         currentcardslevel++;
-        PlayerPrefs.SetInt("cardslevl", currentcardslevel);
+        Debug.Log("current level =" + currentcardslevel);
+        PlayerPrefs.SetInt("cardslevel", currentcardslevel);
         yield return new WaitForSeconds(1f);
         topscore.gameObject.SetActive(false);
         winpanel.SetActive(true);
@@ -190,6 +196,9 @@ public class matchingCardScripts : MonoBehaviour
         yield return new WaitForSeconds(1f);
         firstCard.GetComponent<Button>().enabled = false;
         secondCard.GetComponent<Button>().enabled = false;
+        // firstCard.transform.parent = null;
+        firstCard.transform.parent = Solved;
+        secondCard.transform.parent = Solved;
         enableClick(true);
 
     }
@@ -207,6 +216,8 @@ public class matchingCardScripts : MonoBehaviour
             GameObject tempcurrentCard = CardsPlacing.GetChild(i).gameObject;
             int tempIndex = int.Parse(tempcurrentCard.name);
             tempcurrentCard.transform.GetChild(0).GetComponent<Image>().sprite = hiddenImages[tempIndex];
+            enableClick(false);
+            Invoke("flipBackAll", 2f);
             // tempcurrentCard.GetComponent<Button>().interactable = false;
         }
     }
@@ -214,11 +225,27 @@ public class matchingCardScripts : MonoBehaviour
     { //flip back all cards
         for (int i = 0; i < CardsPlacing.childCount; i++)
         {
+            enableClick(true);
             GameObject tempcurrentCard = CardsPlacing.GetChild(i).gameObject;
             int tempIndex = int.Parse(tempcurrentCard.name);
             tempcurrentCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
             tempcurrentCard.GetComponent<Button>().interactable = true;
         }
+    }
+    int hintindex;
+    public void onHintClick()
+    {
+        if (hintindex < 1)
+        {
+            flipAll();
+        }
+        else
+        {
+            flipAll();
+            // hintbtn.transform.GetChild(0).SetActive(true);
+        }
+        hintindex++;
+
     }
     public void onBackBtnClick()
     {

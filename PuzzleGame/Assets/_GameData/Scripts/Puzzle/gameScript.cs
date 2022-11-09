@@ -160,6 +160,7 @@ public class gameScript : MonoBehaviour
         if (!win)
         {
             win = true;
+            CoinManager.instance.Add(50);
             yield return new WaitForSeconds(1f);
             panel.SetActive(true);
             currentlevel++;

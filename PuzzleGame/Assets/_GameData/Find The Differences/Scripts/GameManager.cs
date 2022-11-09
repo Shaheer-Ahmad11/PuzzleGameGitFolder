@@ -248,6 +248,7 @@ public class GameManager : MonoBehaviour
     private void GameWin()
     {
         Sound.REF.PlayMusic("sndMusicMain");
+        CoinManager.instance.Add(50);
         for (int i = 0; i < GObjsList.Length; i++)
         {
             GObjsList[i].SetActive(false);
