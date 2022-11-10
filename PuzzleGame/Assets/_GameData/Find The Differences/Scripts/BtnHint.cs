@@ -42,7 +42,7 @@ public class BtnHint : MonoBehaviour
 
     public void Onhintbutttonclick()
     {
-        Point.isoverobject = true;
+        GameManager.REF.isoverobject = true;
         if (enable)
         {
             if (hintCount >= 1)
@@ -127,7 +127,7 @@ public class BtnHint : MonoBehaviour
     private void EnableHint()
     {
         enable = true;
-        base.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+        base.gameObject.GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
 
     }
 }

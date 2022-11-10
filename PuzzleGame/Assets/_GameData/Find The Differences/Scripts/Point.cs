@@ -3,7 +3,7 @@ using UnityEngine;
 public class Point : MonoBehaviour
 {
     public Sprite spPointCheck;
-    public static bool isoverobject;
+    // public static bool isoverobject;
     public bool enable = true;
     // public static bool heart=false;
 
@@ -19,7 +19,8 @@ public class Point : MonoBehaviour
     {
         if (enable)
         {
-            isoverobject = true;
+            SoundManager.instance.Play("differencespoted");
+            GameManager.REF.isoverobject = true;
             enable = false;
             base.gameObject.GetComponent<SpriteRenderer>().sprite = spPointCheck;
             base.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);

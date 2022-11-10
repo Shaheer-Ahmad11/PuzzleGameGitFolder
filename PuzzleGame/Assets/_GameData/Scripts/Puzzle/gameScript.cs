@@ -43,6 +43,7 @@ public class gameScript : MonoBehaviour
             {
                 if (Vector2.Distance(a: emptySpace.position, b: hit.transform.position) < 2)
                 {
+                    SoundManager.instance.Play("Slide");
                     Vector2 lastEmptySpacePos = emptySpace.position;
                     tileScript thisTile = hit.transform.GetComponent<tileScript>();
 
@@ -163,6 +164,7 @@ public class gameScript : MonoBehaviour
             CoinManager.instance.Add(50);
             yield return new WaitForSeconds(1f);
             panel.SetActive(true);
+            SoundManager.instance.Play("Victory");
             currentlevel++;
             Debug.Log(currentlevel);
 

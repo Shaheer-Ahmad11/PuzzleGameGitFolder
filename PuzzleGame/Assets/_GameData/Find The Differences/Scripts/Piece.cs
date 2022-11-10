@@ -76,6 +76,6 @@ public class Piece : MonoBehaviour
     private void OnMouseUp()
     {
         draging = false;
-        Point.isoverobject = true;
+        GameManager.REF.isoverobject = true;
     }
 }

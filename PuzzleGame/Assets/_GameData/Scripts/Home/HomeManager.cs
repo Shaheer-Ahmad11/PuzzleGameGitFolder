@@ -9,7 +9,7 @@ public class HomeManager : MonoBehaviour
     public static HomeManager instance;
     public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel, differenceLevelSelectPanel, soundButton, vibrationButton;
     public Transform puzzleLevelPanel, differenceLevelPanel;
-    public int totalPuzzleLevels, _currentPuzzleLevel, totalDifferenceLevels, _currentDifferenceLevel;
+    public int totalPuzzleLevels, _currentPuzzleLevel, totalDifferenceLevels, _currentDifferenceLevel, _currentcardslevel;
 
     public static bool isSound, isVibration;
     private void Awake()
@@ -21,8 +21,9 @@ public class HomeManager : MonoBehaviour
     }
     private void Start()
     {
+        _currentcardslevel = PlayerPrefs.GetInt("cardslevel");
         _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
-        _currentDifferenceLevel = PlayerPrefs.GetInt("level") + 1;
+        _currentDifferenceLevel = PlayerPrefs.GetInt("level");
         if (_currentPuzzleLevel > totalPuzzleLevels)
         {
             _currentPuzzleLevel = 1;
@@ -114,6 +115,7 @@ public class HomeManager : MonoBehaviour
     public void loadPuzzleLevels()
     {
         _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
+        Debug.Log(_currentDifferenceLevel);
         for (int i = 1; i <= totalPuzzleLevels; i++)
         {
             GameObject puzzlelevelbutton = Instantiate(LevelSelectButtonPrefab, puzzleLevelPanel);

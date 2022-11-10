@@ -35,14 +35,14 @@ public class matchingCardScripts : MonoBehaviour
             }
             if (!PlayerPrefs.HasKey("totalcard"))
             {
-                PlayerPrefs.SetInt("totalcard", 24);
+                PlayerPrefs.SetInt("totalcard", 12);
             }
 
             totalCards = PlayerPrefs.GetInt("totalcard", totalCards);
 
-            if (totalCards < 24 && currentcardslevel < 4)
+            if (totalCards < 12 && currentcardslevel < 4)
             {
-                totalCards = 24;
+                totalCards = 12;
                 PlayerPrefs.SetInt("totalcard", totalCards);
             }
             else if (currentcardslevel % 5 == 0 && currentcardslevel != PlayerPrefs.GetInt("prevlevel"))
@@ -85,6 +85,7 @@ public class matchingCardScripts : MonoBehaviour
             card.GetComponent<Button>().interactable = false;
 
         }
+        StartCoroutine(enableClick(false));
         Invoke("flipAll", 1f);
 
     }
@@ -117,6 +118,7 @@ public class matchingCardScripts : MonoBehaviour
             if (firstCard.name == secondCard.name)
             {
                 TotalScored++;
+                SoundManager.instance.Play("cardsmatch");
                 topscore.GetChild(TotalScored - 1).GetComponent<Image>().sprite = tikimage;
                 ScoreText.text = "Score = " + TotalScored;
                 StartCoroutine(offMatchedCards());
@@ -137,6 +139,7 @@ public class matchingCardScripts : MonoBehaviour
     private IEnumerator nextLevel()
     {
         CoinManager.instance.Add(50);
+        SoundManager.instance.Play("Victory");
         currentcardslevel++;
         Debug.Log("current level =" + currentcardslevel);
         PlayerPrefs.SetInt("cardslevel", currentcardslevel);
@@ -153,6 +156,7 @@ public class matchingCardScripts : MonoBehaviour
         {
             CardsPlacing.GetComponent<GridLayoutGroup>().enabled = false;
         }
+        SoundManager.instance.Play("Slide");
         clickedIndex++;
         currentClickedNumber++;
         totalMoves = currentClickedNumber / 2;
@@ -170,7 +174,7 @@ public class matchingCardScripts : MonoBehaviour
         {
             secondCard = EventSystem.current.currentSelectedGameObject;
             secondCard.GetComponent<Button>().interactable = false;
-            enableClick(false);
+            StartCoroutine(enableClick(false));
             // for (int i = 0; i < CardsPlacing.childCount; i++)
             // {
             //     CardsPlacing.GetChild(i).GetComponent<Button>().interactable = false;
@@ -180,13 +184,14 @@ public class matchingCardScripts : MonoBehaviour
     void flipCard(int currentCard, int cardname)
     { //flip only one card(Clicked Card)
         CardsPlacing.transform.GetChild(currentCard).GetChild(0).GetComponent<Image>().sprite = hiddenImages[cardname];
+        // CardsPlacing.transform.GetChild(currentCard).GetComponent<Button>().interactable = false;
     }
     private IEnumerator flipback()
     {//flip back 2 clicked cards
         yield return new WaitForSeconds(1f);
         firstCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
         secondCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
-        enableClick(true);
+        StartCoroutine(enableClick(true));
 
     }
     private IEnumerator offMatchedCards()
@@ -199,11 +204,12 @@ public class matchingCardScripts : MonoBehaviour
         // firstCard.transform.parent = null;
         firstCard.transform.parent = Solved;
         secondCard.transform.parent = Solved;
-        enableClick(true);
+        StartCoroutine(enableClick(true));
 
     }
-    void enableClick(bool isInteractable)
+    private IEnumerator enableClick(bool isInteractable)
     {//enable or disable click on card when needed
+        yield return new WaitForSeconds(0f);
         for (int i = 0; i < CardsPlacing.childCount; i++)
         {
             CardsPlacing.GetChild(i).GetComponent<Button>().interactable = isInteractable;
@@ -211,12 +217,12 @@ public class matchingCardScripts : MonoBehaviour
     }
     public void flipAll()
     {//flip all cards 
+        StartCoroutine(enableClick(false));
         for (int i = 0; i < CardsPlacing.childCount; i++)
         {
             GameObject tempcurrentCard = CardsPlacing.GetChild(i).gameObject;
             int tempIndex = int.Parse(tempcurrentCard.name);
             tempcurrentCard.transform.GetChild(0).GetComponent<Image>().sprite = hiddenImages[tempIndex];
-            enableClick(false);
             Invoke("flipBackAll", 2f);
             // tempcurrentCard.GetComponent<Button>().interactable = false;
         }
@@ -225,22 +231,24 @@ public class matchingCardScripts : MonoBehaviour
     { //flip back all cards
         for (int i = 0; i < CardsPlacing.childCount; i++)
         {
-            enableClick(true);
             GameObject tempcurrentCard = CardsPlacing.GetChild(i).gameObject;
             int tempIndex = int.Parse(tempcurrentCard.name);
             tempcurrentCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
-            tempcurrentCard.GetComponent<Button>().interactable = true;
+            // tempcurrentCard.GetComponent<Button>().interactable = true;
         }
+        StartCoroutine(enableClick(true));
     }
     int hintindex;
     public void onHintClick()
     {
         if (hintindex < 1)
         {
+            StartCoroutine(enableClick(false));
             flipAll();
         }
         else
         {
+            StartCoroutine(enableClick(false));
             flipAll();
             // hintbtn.transform.GetChild(0).SetActive(true);
         }

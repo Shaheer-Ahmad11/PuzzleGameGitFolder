@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public bool debugMod = true;
+    public bool debugMod = true, isoverobject;
 
     public int debugJumpToLevel = -99;
 
@@ -255,6 +255,7 @@ public class GameManager : MonoBehaviour
         }
         pointsPanel.SetActive(false);
         winPanel.SetActive(true);
+        SoundManager.instance.Play("Victory");
         // objWin.SetActive(value: true);
         MonoBehaviour.print("You Win!");
         float time = 6f;
@@ -303,21 +304,17 @@ public class GameManager : MonoBehaviour
         }
         touchCounter++;
         MonoBehaviour.print("touchCounter = " + touchCounter);
-        if (Point.isoverobject)
+        if (isoverobject)
         {
             Debug.Log(" over object");
-            Point.isoverobject = false;
+            isoverobject = false;
         }
 
-        else if (!Point.isoverobject)
+        else if (!isoverobject && !IsPointerOverGameObject())
         {
-
             Debug.Log("wrong touch not over object");
             heartParent.transform.GetChild(heartCount - 1).gameObject.SetActive(false);
             heartCount--;
-
-
-
         }
         // else if (!EventSystem.current.IsPointerOverGameObject())
         // {

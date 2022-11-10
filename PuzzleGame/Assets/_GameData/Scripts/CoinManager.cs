@@ -15,20 +15,14 @@ public class CoinManager : MonoBehaviour
     {
         if (instance == null)
         { instance = this; }
-        if (!PlayerPrefs.HasKey("totalCoins"))
-        {
-            PlayerPrefs.SetInt("totalCoins", 100);
-        }
         if (istest)
         {
             totalCoins = int.Parse(testCoins);
             PlayerPrefs.SetInt("totalCoins", totalCoins);
         }
         totalCoins = PlayerPrefs.GetInt("totalCoins");
-        CoinValueText.text = totalCoins.ToString();
-
+        UpdateCoins();
     }
-
 
     public void Add(int value)
     {
@@ -39,5 +33,9 @@ public class CoinManager : MonoBehaviour
     {
         totalCoins -= value;
         PlayerPrefs.SetInt("totalCoins", totalCoins);
+    }
+    public void UpdateCoins()
+    {
+        CoinValueText.text = totalCoins.ToString();
     }
 }

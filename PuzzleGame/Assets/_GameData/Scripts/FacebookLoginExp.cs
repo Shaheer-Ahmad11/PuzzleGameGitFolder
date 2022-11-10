@@ -25,9 +25,7 @@ public class FacebookLoginExp : MonoBehaviour
         {
             Instance = this;
         }
-
-
-
+        // DontDestroyOnLoad(gameObject);
         if (!FB.IsInitialized)
         {
 
@@ -43,14 +41,29 @@ public class FacebookLoginExp : MonoBehaviour
     private void Start()
     {
         // PlayerPrefs.DeleteAll();
-        if (!PlayerPrefs.HasKey("puzzlelevel"))
+        fb = GameObject.Find("Settings").transform.GetChild(2).GetChild(3).GetChild(0).GetComponent<Button>();
+        FB_userName = GameObject.Find("Settings").transform.GetChild(2).GetChild(3).GetChild(1).GetComponent<Text>();
+        FB_userDp = GameObject.Find("dp").GetComponent<Image>();
+        //setting Initial values
         {
-            PlayerPrefs.SetInt("puzzlelevel", 1);
+            if (!PlayerPrefs.HasKey("puzzlelevel"))
+            {
+                PlayerPrefs.SetInt("puzzlelevel", 1);
+            }
+            if (!PlayerPrefs.HasKey("level"))
+            {
+                PlayerPrefs.SetInt("level", 1);
+            }
+            if (!PlayerPrefs.HasKey("totalCoins"))
+            {
+                PlayerPrefs.SetInt("totalCoins", 100);
+            }
+            if (!PlayerPrefs.HasKey("cardslevel"))
+            {
+                PlayerPrefs.SetInt("cardslevel", 1);
+            }
         }
-        if (!PlayerPrefs.HasKey("level"))
-        {
-            PlayerPrefs.SetInt("level", 1);
-        }
+
         if (!FB.IsLoggedIn)
         {
             if (!alreadyLoaded)
@@ -60,6 +73,7 @@ public class FacebookLoginExp : MonoBehaviour
                 alreadyLoaded = true;
             }
         }
+
         StartCoroutine(checkLogin());
 
     }
@@ -112,7 +126,7 @@ public class FacebookLoginExp : MonoBehaviour
             {
                 Debug.Log(perm);
             }
-            Invoke("loadCurrent", 1f);
+            Invoke("loadCurrent", 0.5f);
         }
         else
         {
@@ -146,7 +160,7 @@ public class FacebookLoginExp : MonoBehaviour
     }
     IEnumerator checkLogin()
     {
-        DealWithFbMenus(FB.IsLoggedIn);
+
         if (FB.IsLoggedIn)
         {
             PlayFabClientAPI.LoginWithFacebook(new PlayFab.ClientModels.LoginWithFacebookRequest
@@ -155,12 +169,23 @@ public class FacebookLoginExp : MonoBehaviour
                 AccessToken = AccessToken.CurrentAccessToken.TokenString,
                 CreateAccount = true
             }, playfabloginsuccess, playfabloginfailed);
+            fb.gameObject.SetActive(false);
+            isLoggedin = true;
         }
+        else
+        {
+            fb.gameObject.SetActive(true);
+            isLoggedin = false;
+        }
+        DealWithFbMenus(FB.IsLoggedIn);
         yield return new WaitForSeconds(1);
+
         if (!isName && !isPic)
         {
             StartCoroutine(checkLogin());
         }
+
+
     }
     void DealWithFbMenus(bool isLoggedIn)
     {
@@ -220,37 +245,60 @@ public class FacebookLoginExp : MonoBehaviour
     void onDataRecived(GetUserDataResult result)
     {
         Debug.Log(result + ": Data Recived Success");
-        if (result.Data != null && result.Data.ContainsKey("currentPuzzleLevel") && result.Data.ContainsKey("currentDifferenceLecel"))
+        if (result.Data != null && result.Data.ContainsKey("currentPuzzleLevel") && result.Data.ContainsKey("currentDifferenceLecel")
+        && result.Data.ContainsKey("currentCardsLevel") && result.Data.ContainsKey("TotalCoins"))
         {
-            Debug.Log("Puzzle Level = " + result.Data["currentPuzzleLevel"].Value);
-            Debug.Log("difference Level = " + result.Data["currentDifferenceLecel"].Value);
-            HomeManager.instance._currentPuzzleLevel = int.Parse(result.Data["currentPuzzleLevel"].Value);
-            HomeManager.instance._currentDifferenceLevel = int.Parse(result.Data["currentDifferenceLecel"].Value);
-            if (PlayerPrefs.GetInt("puzzlelevel") > HomeManager.instance._currentPuzzleLevel)
+            //gettting data from server
             {
-                HomeManager.instance._currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
-                saveDatatoPlayFab();
+                Debug.Log("Puzzle Level = " + result.Data["currentPuzzleLevel"].Value);
+                Debug.Log("difference Level = " + result.Data["currentDifferenceLecel"].Value);
+                Debug.Log("Cards Level = " + result.Data["currentCardsLevel"].Value);
+                HomeManager.instance._currentPuzzleLevel = int.Parse(result.Data["currentPuzzleLevel"].Value);
+                HomeManager.instance._currentDifferenceLevel = int.Parse(result.Data["currentDifferenceLecel"].Value);
+                HomeManager.instance._currentcardslevel = int.Parse(result.Data["currentCardsLevel"].Value);
+                CoinManager.instance.totalCoins = int.Parse(result.Data["TotalCoins"].Value);
             }
-            if (PlayerPrefs.GetInt("level") > HomeManager.instance._currentDifferenceLevel)
+            //check if current level is greater then server level
             {
-                HomeManager.instance._currentDifferenceLevel = PlayerPrefs.GetInt("level");
-                saveDatatoPlayFab();
+                if (PlayerPrefs.GetInt("puzzlelevel") > HomeManager.instance._currentPuzzleLevel)
+                {
+                    HomeManager.instance._currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
+                    saveDatatoPlayFab();
+                }
+                if (PlayerPrefs.GetInt("level") > HomeManager.instance._currentDifferenceLevel)
+                {
+                    HomeManager.instance._currentDifferenceLevel = PlayerPrefs.GetInt("level");
+                    saveDatatoPlayFab();
+                }
+                if (PlayerPrefs.GetInt("cardslevel") > HomeManager.instance._currentcardslevel)
+                {
+                    HomeManager.instance._currentcardslevel = PlayerPrefs.GetInt("cardslevel");
+                    saveDatatoPlayFab();
+                }
+                if (PlayerPrefs.GetInt("totalCoins") > CoinManager.instance.totalCoins)
+                {
+                    CoinManager.instance.totalCoins = PlayerPrefs.GetInt("totalCoins");
+                    CoinManager.instance.UpdateCoins();
+                    saveDatatoPlayFab();
+                }
+                {
+                    PlayerPrefs.SetInt("puzzlelevel", HomeManager.instance._currentPuzzleLevel);
+                    PlayerPrefs.SetInt("level", HomeManager.instance._currentDifferenceLevel);
+                    PlayerPrefs.SetInt("cardslevel", HomeManager.instance._currentcardslevel);
+                    PlayerPrefs.SetInt("totalCoins", CoinManager.instance.totalCoins);
+                }
             }
-            {
-                PlayerPrefs.SetInt("puzzlelevel", HomeManager.instance._currentPuzzleLevel);
-                PlayerPrefs.SetInt("level", HomeManager.instance._currentDifferenceLevel);
-            }
+
             if (!alreadyLoaded)
             {
                 HomeManager.instance.loadPuzzleLevels();
                 HomeManager.instance.loadDifferenceLevel();
+                alreadyLoaded = true;
             }
-            // SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-            alreadyLoaded = true;
+
         }
         else
         {
-
             saveDatatoPlayFab();
         }
     }
@@ -262,7 +310,9 @@ public class FacebookLoginExp : MonoBehaviour
             {
                 //write your data here
                 {"currentPuzzleLevel", (PlayerPrefs.GetInt("puzzlelevel").ToString()) },
-                {"currentDifferenceLecel",(PlayerPrefs.GetInt("level").ToString())}
+                {"currentDifferenceLecel",(PlayerPrefs.GetInt("level").ToString())},
+                {"currentCardsLevel",(PlayerPrefs.GetInt("cardslevel").ToString())},
+                {"TotalCoins",PlayerPrefs.GetInt("totalCoins").ToString()}
 
     }
         };
@@ -275,15 +325,15 @@ public class FacebookLoginExp : MonoBehaviour
 
     private void Update()
     {
-        if (FB.IsLoggedIn)
-        {
-            fb.gameObject.SetActive(false);
-            isLoggedin = true;
-        }
-        else
-        {
-            fb.gameObject.SetActive(true);
-            isLoggedin = false;
-        }
+        // if (FB.IsLoggedIn)
+        // {
+        //     fb.gameObject.SetActive(false);
+        //     isLoggedin = true;
+        // }
+        // else
+        // {
+        //     fb.gameObject.SetActive(true);
+        //     isLoggedin = false;
+        // }
     }
 }
