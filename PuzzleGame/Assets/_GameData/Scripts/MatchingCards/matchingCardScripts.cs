@@ -118,7 +118,8 @@ public class matchingCardScripts : MonoBehaviour
             if (firstCard.name == secondCard.name)
             {
                 TotalScored++;
-                SoundManager.instance.Play("cardsmatch");
+                if (HomeManager.isSound)
+                { SoundManager.instance.Play("cardsmatch"); }
                 topscore.GetChild(TotalScored - 1).GetComponent<Image>().sprite = tikimage;
                 ScoreText.text = "Score = " + TotalScored;
                 StartCoroutine(offMatchedCards());
@@ -139,7 +140,8 @@ public class matchingCardScripts : MonoBehaviour
     private IEnumerator nextLevel()
     {
         CoinManager.instance.Add(50);
-        SoundManager.instance.Play("Victory");
+        if (HomeManager.isSound)
+        { SoundManager.instance.Play("Victory"); }
         currentcardslevel++;
         Debug.Log("current level =" + currentcardslevel);
         PlayerPrefs.SetInt("cardslevel", currentcardslevel);
@@ -156,7 +158,8 @@ public class matchingCardScripts : MonoBehaviour
         {
             CardsPlacing.GetComponent<GridLayoutGroup>().enabled = false;
         }
-        SoundManager.instance.Play("Slide");
+        if (HomeManager.isSound)
+        { SoundManager.instance.Play("Slide"); }
         clickedIndex++;
         currentClickedNumber++;
         totalMoves = currentClickedNumber / 2;

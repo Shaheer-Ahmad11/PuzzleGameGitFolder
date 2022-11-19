@@ -41,10 +41,10 @@ public class GameManager : MonoBehaviour
     int heartCount;
     private GameObject winPanel;
     private GameObject restartPanel;
-    private string[] GObjs = { "btnHint", "Images", "UI Remaining" };
+    private string[] GObjs = { "Buttonhint", "Images", "UI Remaining" };
     public GameObject[] GObjsList = new GameObject[3];
     public GameObject pointsPanel;
-
+    bool isPlayed;
     private void Start()
     {
         if (REF == null)
@@ -227,10 +227,13 @@ public class GameManager : MonoBehaviour
 
         heartParent = GameObject.Find("Hearts");
         winPanel = heartParent.transform.parent.transform.GetChild(5).gameObject;
+
         restartPanel = heartParent.transform.parent.transform.GetChild(6).gameObject;
+        restartPanel.transform.GetChild(0).GetChild(0).GetComponent<Button>().onClick.AddListener(GoToHome);
+        restartPanel.transform.GetChild(0).GetChild(1).GetComponent<Button>().onClick.AddListener(RestartLevel);
         Home = GameObject.Find("Home");
         Home.GetComponent<Button>().onClick.AddListener(GoToHome);
-
+        isPlayed = false;
         heartCount = 3;
     }
 
@@ -255,7 +258,8 @@ public class GameManager : MonoBehaviour
         }
         pointsPanel.SetActive(false);
         winPanel.SetActive(true);
-        SoundManager.instance.Play("Victory");
+        if (HomeManager.isSound)
+        { SoundManager.instance.Play("Victory"); }
         // objWin.SetActive(value: true);
         MonoBehaviour.print("You Win!");
         float time = 6f;
@@ -335,7 +339,21 @@ public class GameManager : MonoBehaviour
             // restartLevel.GetComponent<Button>().onClick.AddListener(RestartLevel);
             // cancleLevel = GameObject.Find("CancleLevel");
             // cancleLevel.GetComponent<Button>().onClick.AddListener(GoToHome);
-            GoToHome();
+            // GoToHome();
+            if (!isPlayed && HomeManager.isSound)
+            {
+                SoundManager.instance.Play("levelfailed");
+                isPlayed = true;
+            }
+            for (int i = 0; i < GObjsList.Length; i++)
+            {
+                GObjsList[i].SetActive(false);
+            }
+            pointsPanel.SetActive(false);
+            if (!restartPanel.activeInHierarchy)
+            {
+                restartPanel.SetActive(true);
+            }
             Debug.Log("Game End: Lost");
         }
         if (touchCounter > 8)

@@ -8,8 +8,8 @@ public class tileScript : MonoBehaviour
     private Vector3 correctPosition;
     private SpriteRenderer _sprite;
     public int number;
-    public bool  inRightPlace=false;
-    
+    public bool inRightPlace = false;
+
 
     void Awake()
     {
@@ -24,15 +24,15 @@ public class tileScript : MonoBehaviour
         transform.position = Vector3.Lerp(a: transform.position, b: targetPosition, t: 0.3f);
         if (targetPosition == correctPosition)
         {
-            _sprite.color = Color.green;
-            inRightPlace=true;
-            
+            // _sprite.color = Color.green;
+            inRightPlace = true;
+
         }
-       
+
         else
         {
             _sprite.color = Color.white;
-            inRightPlace=false;
+            inRightPlace = false;
 
         }
 

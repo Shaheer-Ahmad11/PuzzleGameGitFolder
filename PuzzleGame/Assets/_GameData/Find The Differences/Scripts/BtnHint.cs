@@ -25,18 +25,18 @@ public class BtnHint : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (hintCount >= 1)
-        {
-            if (AdNetwork.instance.isRewardedVideoAvailable)
-            {
-                GetComponent<Button>().interactable = true;
-                gameObject.transform.GetChild(0).gameObject.SetActive(true);
-            }
-            else
-            {
-                GetComponent<Button>().interactable = false;
-            }
-        }
+        // if (hintCount >= 1)
+        // {
+        //     if (AdNetwork.instance.isRewardedVideoAvailable)
+        //     {
+        //         GetComponent<Button>().interactable = true;
+        //         gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        //     }
+        //     else
+        //     {
+        //         GetComponent<Button>().interactable = false;
+        //     }
+        // }
 
     }
 
@@ -47,11 +47,12 @@ public class BtnHint : MonoBehaviour
         {
             if (hintCount >= 1)
             {
-                if (AdNetwork.instance.isRewardedVideoAvailable)
-                {
-                    AdNetwork.instance.showRewardedVideoAd();
-                    ishint = true;
-                }
+                // if (AdNetwork.instance.isRewardedVideoAvailable)
+                // {
+                // AdNetwork.instance.showRewardedVideoAd();
+                callshowhint();
+                // ishint = true;
+                // }
             }
             else
             {

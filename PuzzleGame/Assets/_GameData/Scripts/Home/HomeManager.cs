@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class HomeManager : MonoBehaviour
 {
     public static HomeManager instance;
+    public Color on, off;
     public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel, differenceLevelSelectPanel, soundButton, vibrationButton;
     public Transform puzzleLevelPanel, differenceLevelPanel;
     public int totalPuzzleLevels, _currentPuzzleLevel, totalDifferenceLevels, _currentDifferenceLevel, _currentcardslevel;
@@ -45,24 +46,28 @@ public class HomeManager : MonoBehaviour
             isSound = true;
             soundButton.transform.GetChild(0).gameObject.SetActive(false);
             soundButton.transform.GetChild(1).gameObject.SetActive(true);
+            soundButton.GetComponent<Image>().color = on;
         }
         else
         {
             isSound = false;
             soundButton.transform.GetChild(0).gameObject.SetActive(true);
             soundButton.transform.GetChild(1).gameObject.SetActive(false);
+            soundButton.GetComponent<Image>().color = off;
         }
         if (PlayerPrefs.GetInt("Vibration") == 1)
         {
             isVibration = true;
             vibrationButton.transform.GetChild(0).gameObject.SetActive(false);
             vibrationButton.transform.GetChild(1).gameObject.SetActive(true);
+            vibrationButton.GetComponent<Image>().color = on;
         }
         else
         {
             isVibration = false;
             vibrationButton.transform.GetChild(0).gameObject.SetActive(true);
             vibrationButton.transform.GetChild(1).gameObject.SetActive(false);
+            vibrationButton.GetComponent<Image>().color = off;
         }
         // loadPuzzleLevels();
         // loadDifferenceLevel();
@@ -177,6 +182,7 @@ public class HomeManager : MonoBehaviour
             isSound = false;
             soundButton.transform.GetChild(0).gameObject.SetActive(true);
             soundButton.transform.GetChild(1).gameObject.SetActive(false);
+            soundButton.GetComponent<Image>().color = off;
         }
         else
         {
@@ -184,6 +190,7 @@ public class HomeManager : MonoBehaviour
             isSound = true;
             soundButton.transform.GetChild(0).gameObject.SetActive(false);
             soundButton.transform.GetChild(1).gameObject.SetActive(true);
+            soundButton.GetComponent<Image>().color = on;
         }
         CheckSound.instance.checkit();
     }
@@ -196,6 +203,7 @@ public class HomeManager : MonoBehaviour
             isVibration = false;
             vibrationButton.transform.GetChild(0).gameObject.SetActive(true);
             vibrationButton.transform.GetChild(1).gameObject.SetActive(false);
+            vibrationButton.GetComponent<Image>().color = off;
         }
         else
         {
@@ -203,6 +211,7 @@ public class HomeManager : MonoBehaviour
             isVibration = true;
             vibrationButton.transform.GetChild(0).gameObject.SetActive(false);
             vibrationButton.transform.GetChild(1).gameObject.SetActive(true);
+            vibrationButton.GetComponent<Image>().color = on;
         }
         CheckSound.instance.checkit();
     }

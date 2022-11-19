@@ -19,7 +19,8 @@ public class Point : MonoBehaviour
     {
         if (enable)
         {
-            SoundManager.instance.Play("differencespoted");
+            if (HomeManager.isSound)
+            { SoundManager.instance.Play("differencespoted"); }
             GameManager.REF.isoverobject = true;
             enable = false;
             base.gameObject.GetComponent<SpriteRenderer>().sprite = spPointCheck;
