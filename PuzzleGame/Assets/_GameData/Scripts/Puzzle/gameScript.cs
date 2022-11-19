@@ -162,7 +162,8 @@ public class gameScript : MonoBehaviour
         if (!win)
         {
             win = true;
-            CoinManager.instance.Add(50);
+            CoinManager.instance.AddCoins(30);
+            CoinManager.instance.AddDiamonds(1);
             yield return new WaitForSeconds(1f);
             panel.SetActive(true);
             if (HomeManager.isSound)

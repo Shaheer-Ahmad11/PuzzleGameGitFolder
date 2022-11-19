@@ -25,55 +25,39 @@ public class BtnHint : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        // if (hintCount >= 1)
-        // {
-        //     if (AdNetwork.instance.isRewardedVideoAvailable)
-        //     {
-        //         GetComponent<Button>().interactable = true;
-        //         gameObject.transform.GetChild(0).gameObject.SetActive(true);
-        //     }
-        //     else
-        //     {
-        //         GetComponent<Button>().interactable = false;
-        //     }
-        // }
+        if (hintCount >= 1)
+        {
+            if (AdNetwork.instance.isRewardedVideoAvailable)
+            {
+                GetComponent<Button>().interactable = true;
+                gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            }
+            else
+            {
+                GetComponent<Button>().interactable = false;
+                gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            }
+        }
 
     }
 
     public void Onhintbutttonclick()
     {
-        GameManager.REF.isoverobject = true;
-        if (enable)
+        if (hintCount >= 1)
         {
-            if (hintCount >= 1)
+            if (AdNetwork.instance.isRewardedVideoAvailable)
             {
-                // if (AdNetwork.instance.isRewardedVideoAvailable)
-                // {
-                // AdNetwork.instance.showRewardedVideoAd();
+                AdNetwork.instance.showRewardedVideoAd();
+                gameObject.transform.GetChild(0).gameObject.SetActive(false);
                 callshowhint();
-                // ishint = true;
-                // }
+                ishint = true;
             }
-            else
-            {
-                callshowhint();
-                // power = UnityEngine.Random.Range(0, 4);
-                // base.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
-                // Sound.REF.Play("sndClick");
-                // Invoke("ShowHint", 0.3f);
-                // Sound.REF.Play("sndHint");
-                // enable = false;
-            }
-            // if (AdNetwork.instance.givereward)
-            // {
-            //     power = UnityEngine.Random.Range(0, 4);
-            //     base.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
-            //     Sound.REF.Play("sndClick");
-            //     Invoke("ShowHint", 0.3f);
-            //     Sound.REF.Play("sndHint");
-            //     enable = false;
-            // }
         }
+        else
+        {
+            callshowhint();
+        }
+        GameManager.REF.isoverobject = true;
     }
     public void callshowhint()
     {

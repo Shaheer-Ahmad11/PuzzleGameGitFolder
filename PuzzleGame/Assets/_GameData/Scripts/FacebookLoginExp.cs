@@ -62,6 +62,10 @@ public class FacebookLoginExp : MonoBehaviour
             {
                 PlayerPrefs.SetInt("cardslevel", 1);
             }
+            if (!PlayerPrefs.HasKey("totaldiamonds"))
+            {
+                PlayerPrefs.SetInt("totaldiamonds", 25);
+            }
         }
 
         if (!FB.IsLoggedIn)

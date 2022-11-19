@@ -251,7 +251,8 @@ public class GameManager : MonoBehaviour
     private void GameWin()
     {
         Sound.REF.PlayMusic("sndMusicMain");
-        CoinManager.instance.Add(50);
+        CoinManager.instance.AddCoins(30);
+        CoinManager.instance.AddDiamonds(1);
         for (int i = 0; i < GObjsList.Length; i++)
         {
             GObjsList[i].SetActive(false);
@@ -299,7 +300,7 @@ public class GameManager : MonoBehaviour
 
         return false;
     }
-
+    bool _OnUIClick;
     private void Update()
     {
         if (!Input.GetMouseButtonUp(0) || !(SceneManager.GetActiveScene().name == "lvlGame") || objWin.activeSelf)
@@ -308,13 +309,14 @@ public class GameManager : MonoBehaviour
         }
         touchCounter++;
         MonoBehaviour.print("touchCounter = " + touchCounter);
-        if (isoverobject)
+        if (isoverobject || _OnUIClick)
         {
             Debug.Log(" over object");
             isoverobject = false;
+            _OnUIClick = false;
         }
 
-        else if (!isoverobject && !IsPointerOverGameObject())
+        else if (!isoverobject && (!_OnUIClick || !IsPointerOverGameObject()))
         {
             Debug.Log("wrong touch not over object");
             heartParent.transform.GetChild(heartCount - 1).gameObject.SetActive(false);
@@ -375,5 +377,9 @@ public class GameManager : MonoBehaviour
     public void RestartLevel()
     {
         SceneManager.LoadScene("lvlGame");
+    }
+    public void OnUIClick()
+    {
+        _OnUIClick = true;
     }
 }

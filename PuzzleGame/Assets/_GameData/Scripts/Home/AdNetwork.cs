@@ -48,7 +48,7 @@ public class AdNetwork : MonoBehaviour
         isInterstitialReady = false;
         givereward = false;
         loadInterstitialAd();
-        loadbanner();
+        // loadbanner();
 
     }
 
@@ -188,6 +188,7 @@ public class AdNetwork : MonoBehaviour
     void RewardedVideoAdRewardedEvent(IronSourcePlacement ssp)
     {
         Debug.Log("unity-script: I got RewardedVideoAdRewardedEvent, amount = " + ssp.getRewardAmount() + " name = " + ssp.getRewardName());
+        Debug.Log("GiveReward");
         givereward = true;
         if (givereward && BtnHint.instance.ishint)
         {
@@ -199,19 +200,19 @@ public class AdNetwork : MonoBehaviour
     void RewardedVideoAdClosedEvent()
     {
         Debug.Log("unity-script: I got RewardedVideoAdClosedEvent");
-        if (givereward && BtnHint.instance.ishint)
-        {
-            BtnHint.instance.callshowhint();
-            BtnHint.instance.ishint = false;
-            givereward = false;
-        }
+        // if (givereward && BtnHint.instance.ishint)
+        // {
+        //     BtnHint.instance.callshowhint();
+        //     BtnHint.instance.ishint = false;
+        //     givereward = false;
+        // }
 
     }
     void RewardedVideoAvailabilityChangedEvent(bool canShowAd)
     {
         Debug.Log("unity-script: I got RewardedVideoAvailabilityChangedEvent, value = " + canShowAd);
         if (IronSource.Agent.isRewardedVideoAvailable())
-            isRewardedVideoAvailable = true;
+            isRewardedVideoAvailable = canShowAd;
     }
     void RewardedVideoAdStartedEvent()
     {

@@ -139,7 +139,8 @@ public class matchingCardScripts : MonoBehaviour
     }
     private IEnumerator nextLevel()
     {
-        CoinManager.instance.Add(50);
+        CoinManager.instance.AddCoins(30);
+        CoinManager.instance.AddDiamonds(1);
         if (HomeManager.isSound)
         { SoundManager.instance.Play("Victory"); }
         currentcardslevel++;
