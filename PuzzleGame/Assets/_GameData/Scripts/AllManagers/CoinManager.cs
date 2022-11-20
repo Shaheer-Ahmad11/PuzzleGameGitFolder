@@ -40,8 +40,8 @@ public class CoinManager : MonoBehaviour
     }
     public void UpdateCoins()
     {
-        CoinValueText.text = totalCoins.ToString();
-        coinvaluetextinPanel.text = totalCoins.ToString();
+        CoinValueText.text = PlayerPrefs.GetInt("totalCoins").ToString();
+        coinvaluetextinPanel.text = PlayerPrefs.GetInt("totalCoins").ToString();
     }
 
     //diamonds
