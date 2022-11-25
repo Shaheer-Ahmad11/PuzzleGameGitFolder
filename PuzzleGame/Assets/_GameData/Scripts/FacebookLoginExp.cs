@@ -74,6 +74,7 @@ public class FacebookLoginExp : MonoBehaviour
             {
                 HomeManager.instance.loadPuzzleLevels();
                 HomeManager.instance.loadDifferenceLevel();
+                HomeManager.instance.loadMcCardsLevel();
                 alreadyLoaded = true;
             }
         }
@@ -159,6 +160,7 @@ public class FacebookLoginExp : MonoBehaviour
         {
             HomeManager.instance.loadPuzzleLevels();
             HomeManager.instance.loadDifferenceLevel();
+            HomeManager.instance.loadMcCardsLevel();
             alreadyLoaded = true;
         }
     }
@@ -250,7 +252,7 @@ public class FacebookLoginExp : MonoBehaviour
     {
         Debug.Log(result + ": Data Recived Success");
         if (result.Data != null && result.Data.ContainsKey("currentPuzzleLevel") && result.Data.ContainsKey("currentDifferenceLecel")
-        && result.Data.ContainsKey("currentCardsLevel") && result.Data.ContainsKey("TotalCoins"))
+        && result.Data.ContainsKey("currentCardsLevel") && result.Data.ContainsKey("TotalCoins") && result.Data.ContainsKey("TotalDiamonds"))
         {
             //gettting data from server
             {
@@ -261,6 +263,7 @@ public class FacebookLoginExp : MonoBehaviour
                 HomeManager.instance._currentDifferenceLevel = int.Parse(result.Data["currentDifferenceLecel"].Value);
                 HomeManager.instance._currentcardslevel = int.Parse(result.Data["currentCardsLevel"].Value);
                 CoinManager.instance.totalCoins = int.Parse(result.Data["TotalCoins"].Value);
+                CoinManager.instance.totalDiamonds = int.Parse(result.Data["TotalDiamonds"].Value);
             }
             //check if current level is greater then server level
             {
@@ -285,11 +288,18 @@ public class FacebookLoginExp : MonoBehaviour
                     CoinManager.instance.UpdateCoins();
                     saveDatatoPlayFab();
                 }
+                if (PlayerPrefs.GetInt("totaldiamonds") > CoinManager.instance.totalDiamonds)
+                {
+                    CoinManager.instance.totalDiamonds = PlayerPrefs.GetInt("totaldiamonds");
+                    CoinManager.instance.UpdateDiamonds();
+                    saveDatatoPlayFab();
+                }
                 {
                     PlayerPrefs.SetInt("puzzlelevel", HomeManager.instance._currentPuzzleLevel);
                     PlayerPrefs.SetInt("level", HomeManager.instance._currentDifferenceLevel);
                     PlayerPrefs.SetInt("cardslevel", HomeManager.instance._currentcardslevel);
                     PlayerPrefs.SetInt("totalCoins", CoinManager.instance.totalCoins);
+                    PlayerPrefs.SetInt("totaldiamonds", CoinManager.instance.totalDiamonds);
                 }
             }
 
@@ -297,6 +307,7 @@ public class FacebookLoginExp : MonoBehaviour
             {
                 HomeManager.instance.loadPuzzleLevels();
                 HomeManager.instance.loadDifferenceLevel();
+                HomeManager.instance.loadMcCardsLevel();
                 alreadyLoaded = true;
             }
 
@@ -316,7 +327,8 @@ public class FacebookLoginExp : MonoBehaviour
                 {"currentPuzzleLevel", (PlayerPrefs.GetInt("puzzlelevel").ToString()) },
                 {"currentDifferenceLecel",(PlayerPrefs.GetInt("level").ToString())},
                 {"currentCardsLevel",(PlayerPrefs.GetInt("cardslevel").ToString())},
-                {"TotalCoins",PlayerPrefs.GetInt("totalCoins").ToString()}
+                {"TotalCoins",PlayerPrefs.GetInt("totalCoins").ToString()},
+                {"TotalDiamonds",PlayerPrefs.GetInt("totaldiamonds").ToString()}
 
     }
         };

@@ -12,7 +12,7 @@ public class matchingCardScripts : MonoBehaviour
     public Transform topscore;
     [SerializeField] int totalCards;
     [SerializeField] Transform CardsPlacing, Solved;
-    public GameObject cardsPrefab, questiomarkprefab;
+    public GameObject cardsPrefab, questiomarkprefab, hintbtn;
     public Sprite startImage, tikimage;
     List<int> cardsNumbers = new List<int>();
     private int clickedIndex, currentClickedNumber, totalMoves, TotalScored, currentcardslevel;
@@ -58,6 +58,23 @@ public class matchingCardScripts : MonoBehaviour
             if (totalCards >= 72)
             {
                 totalCards = 72;
+            }
+
+            if (currentcardslevel % 2 == 0)
+            {
+                CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 6;
+            }
+            else
+            {
+                CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedRowCount;
+
+                if (totalCards <= 36)
+                { CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 6; }
+                else if (totalCards > 36 && totalCards % 6 == 0)
+                {
+                    CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = totalCards / 6;
+                }
             }
         }
         for (int i = 0; i < totalCards / 2; i++)
@@ -135,6 +152,29 @@ public class matchingCardScripts : MonoBehaviour
             win = true;
             Debug.Log("levelWin");
             StartCoroutine(nextLevel());
+        }
+
+        if (hintindex >= 1)
+        {
+            if (AdNetwork.instance.isRewardedVideoAvailable)
+            {
+                hintbtn.transform.GetChild(0).gameObject.SetActive(true);
+                hintbtn.GetComponent<Button>().interactable = true;
+            }
+
+            else
+            {
+                hintbtn.transform.GetChild(0).gameObject.SetActive(false);
+                hintbtn.GetComponent<Button>().interactable = false;
+            }
+        }
+
+        if (AdNetwork.instance.givereward && AdNetwork.instance.adclosed)
+        {
+            StartCoroutine(enableClick(false));
+            flipAll();
+            AdNetwork.instance.givereward = false;
+            AdNetwork.instance.adclosed = false;
         }
     }
     private IEnumerator nextLevel()
@@ -242,22 +282,24 @@ public class matchingCardScripts : MonoBehaviour
         }
         StartCoroutine(enableClick(true));
     }
-    int hintindex;
+    int hintindex = 0;
     public void onHintClick()
     {
-        if (hintindex < 1)
+
+        Debug.Log(hintindex);
+        if (hintindex >= 1)
         {
-            StartCoroutine(enableClick(false));
-            flipAll();
+            if (AdNetwork.instance.isRewardedVideoAvailable)
+            {
+                AdNetwork.instance.showRewardedVideoAd();
+            }
         }
         else
         {
             StartCoroutine(enableClick(false));
             flipAll();
-            // hintbtn.transform.GetChild(0).SetActive(true);
         }
         hintindex++;
-
     }
     public void onBackBtnClick()
     {

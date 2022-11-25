@@ -15,7 +15,7 @@ public class AdNetwork : MonoBehaviour
     public string iOS_APP_KEY;
 
     [HideInInspector]
-    public bool isRewardedVideoAvailable, isInterstitialReady, givereward;
+    public bool isRewardedVideoAvailable, isInterstitialReady, givereward, adclosed;
     private string appKey;
     // 145fd75e1
     private void Awake()
@@ -47,8 +47,10 @@ public class AdNetwork : MonoBehaviour
         isRewardedVideoAvailable = false;
         isInterstitialReady = false;
         givereward = false;
+        adclosed = false;
         loadInterstitialAd();
         // loadbanner();
+        DontDestroyOnLoad(gameObject);
 
     }
 
@@ -187,25 +189,15 @@ public class AdNetwork : MonoBehaviour
     }
     void RewardedVideoAdRewardedEvent(IronSourcePlacement ssp)
     {
-        Debug.Log("unity-script: I got RewardedVideoAdRewardedEvent, amount = " + ssp.getRewardAmount() + " name = " + ssp.getRewardName());
         Debug.Log("GiveReward");
         givereward = true;
-        if (givereward && BtnHint.instance.ishint)
-        {
-            BtnHint.instance.callshowhint();
-            BtnHint.instance.ishint = false;
-        }
+
     }
 
     void RewardedVideoAdClosedEvent()
     {
         Debug.Log("unity-script: I got RewardedVideoAdClosedEvent");
-        // if (givereward && BtnHint.instance.ishint)
-        // {
-        //     BtnHint.instance.callshowhint();
-        //     BtnHint.instance.ishint = false;
-        //     givereward = false;
-        // }
+        adclosed = true;
 
     }
     void RewardedVideoAvailabilityChangedEvent(bool canShowAd)
@@ -217,8 +209,7 @@ public class AdNetwork : MonoBehaviour
     void RewardedVideoAdStartedEvent()
     {
         Debug.Log("unity-script: I got RewardedVideoAdStartedEvent");
-        if (!IronSource.Agent.isRewardedVideoAvailable())
-            isRewardedVideoAvailable = false;
+        isRewardedVideoAvailable = false;
     }
 
     void RewardedVideoAdEndedEvent()

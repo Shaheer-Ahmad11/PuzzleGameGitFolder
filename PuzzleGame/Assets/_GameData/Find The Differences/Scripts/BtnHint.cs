@@ -38,7 +38,12 @@ public class BtnHint : MonoBehaviour
                 gameObject.transform.GetChild(0).gameObject.SetActive(false);
             }
         }
-
+        if (AdNetwork.instance.givereward && AdNetwork.instance.adclosed)
+        {
+            callshowhint();
+            AdNetwork.instance.givereward = false;
+            AdNetwork.instance.adclosed = false;
+        }
     }
 
     public void Onhintbutttonclick()
@@ -48,8 +53,9 @@ public class BtnHint : MonoBehaviour
             if (AdNetwork.instance.isRewardedVideoAvailable)
             {
                 AdNetwork.instance.showRewardedVideoAd();
+
                 gameObject.transform.GetChild(0).gameObject.SetActive(false);
-                callshowhint();
+                // callshowhint();
                 ishint = true;
             }
         }

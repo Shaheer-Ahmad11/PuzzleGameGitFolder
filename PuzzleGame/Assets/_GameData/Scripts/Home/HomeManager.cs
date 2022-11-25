@@ -8,9 +8,9 @@ public class HomeManager : MonoBehaviour
 {
     public static HomeManager instance;
     public Color on, off;
-    public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel, differenceLevelSelectPanel, soundButton, vibrationButton;
-    public Transform puzzleLevelPanel, differenceLevelPanel;
-    public int totalPuzzleLevels, _currentPuzzleLevel, totalDifferenceLevels, _currentDifferenceLevel, _currentcardslevel;
+    public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel, differenceLevelSelectPanel, CardsLevelselectPanel, soundButton, vibrationButton;
+    public Transform puzzleLevelPanel, differenceLevelPanel, CardsLevelPanel;
+    public int totalPuzzleLevels, _currentPuzzleLevel, totalDifferenceLevels, _currentDifferenceLevel, _currentcardslevel, totalCardsLevels;
 
     public static bool isSound, isVibration;
     private void Awake()
@@ -25,13 +25,17 @@ public class HomeManager : MonoBehaviour
         _currentcardslevel = PlayerPrefs.GetInt("cardslevel");
         _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
         _currentDifferenceLevel = PlayerPrefs.GetInt("level");
-        if (_currentPuzzleLevel > totalPuzzleLevels)
+        if (_currentPuzzleLevel >= totalPuzzleLevels - 1)
         {
             _currentPuzzleLevel = 1;
         }
-        if (_currentDifferenceLevel > totalDifferenceLevels)
+        if (_currentDifferenceLevel >= totalDifferenceLevels - 1)
         {
             _currentDifferenceLevel = 1;
+        }
+        if (_currentcardslevel >= totalCardsLevels - 1)
+        {
+            _currentcardslevel = 1;
         }
         if (!PlayerPrefs.HasKey("Sound"))
         {
@@ -147,7 +151,7 @@ public class HomeManager : MonoBehaviour
     }
     public void loadDifferenceLevel()
     {
-        _currentDifferenceLevel = PlayerPrefs.GetInt("level") + 1;
+        _currentDifferenceLevel = PlayerPrefs.GetInt("level");
         Debug.Log(_currentDifferenceLevel);
         for (int i = 1; i <= totalDifferenceLevels; i++)
         {
@@ -156,7 +160,11 @@ public class HomeManager : MonoBehaviour
             Sprite differenceImage = Resources.Load<Sprite>("Difference/" + i);
             differencelevelbutton.transform.GetChild(0).GetComponent<Image>().sprite = differenceImage;
             differencelevelbutton.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(loadDifferencelevelScene);
-            if (i < _currentDifferenceLevel)
+            if (i == _currentDifferenceLevel)
+            {
+                differencelevelbutton.transform.GetChild(3).gameObject.SetActive(false);
+            }
+            else if (i < _currentDifferenceLevel)
             {
                 differencelevelbutton.transform.GetChild(1).gameObject.SetActive(false);
                 differencelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
@@ -170,9 +178,38 @@ public class HomeManager : MonoBehaviour
         }
 
     }
+    public void loadMcCardsLevel()
+    {
+        _currentcardslevel = PlayerPrefs.GetInt("cardslevel");
+        Debug.Log(_currentcardslevel);
+        for (int i = 1; i <= totalCardsLevels; i++)
+        {
+            GameObject Cardslevelbutton = Instantiate(LevelSelectButtonPrefab, CardsLevelPanel);
+            Cardslevelbutton.name = i.ToString();
+            Sprite CardsImage = Resources.Load<Sprite>("MatchingCards/" + i);
+            Cardslevelbutton.transform.GetChild(0).GetComponent<Image>().sprite = CardsImage;
+            Cardslevelbutton.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(loadCardsLevel);
+            if (i == _currentcardslevel)
+            {
+                Cardslevelbutton.transform.GetChild(3).gameObject.SetActive(false);
+            }
+            else if (i < _currentcardslevel)
+            {
+                Cardslevelbutton.transform.GetChild(1).gameObject.SetActive(false);
+                Cardslevelbutton.transform.GetChild(2).gameObject.SetActive(false);
+                Cardslevelbutton.transform.GetChild(3).gameObject.SetActive(false);
+            }
+            else if (i != _currentcardslevel)
+            {
+                Cardslevelbutton.transform.GetChild(2).gameObject.SetActive(false);
+                Cardslevelbutton.transform.GetChild(3).gameObject.SetActive(true);
+            }
+        }
+
+    }
     public void onMatchingCardsBtnClick()
     {
-        loadCardsLevel();
+        CardsLevelselectPanel.SetActive(true);
     }
     public void onSoundButtonClick()
     {

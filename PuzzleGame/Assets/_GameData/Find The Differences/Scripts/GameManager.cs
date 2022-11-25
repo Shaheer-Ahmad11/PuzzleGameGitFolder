@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("level"))
         {
-            level = PlayerPrefs.GetInt("level");
+            level = PlayerPrefs.GetInt("level") - 1;
             if (level >= pointsPanelList.Length)
             {
                 level = 0;
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
 
     private void SaveLevel()
     {
-        PlayerPrefs.SetInt("level", level);
+        PlayerPrefs.SetInt("level", level + 1);
         PlayerPrefs.Save();
         MonoBehaviour.print("Save Level = " + level);
     }
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
         GameObject gameObject = GameObject.Find("StarsText");
         if ((bool)gameObject && stars > 0)
         {
-            gameObject.GetComponent<TextMeshPro>().text = stars.ToString();
+            // gameObject.GetComponent<TextMeshPro>().text = stars.ToString();
         }
     }
 
