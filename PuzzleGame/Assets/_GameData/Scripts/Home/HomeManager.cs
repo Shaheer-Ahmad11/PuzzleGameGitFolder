@@ -11,6 +11,7 @@ public class HomeManager : MonoBehaviour
     public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel, differenceLevelSelectPanel, CardsLevelselectPanel, soundButton, vibrationButton;
     public Transform puzzleLevelPanel, differenceLevelPanel, CardsLevelPanel;
     public int totalPuzzleLevels, _currentPuzzleLevel, totalDifferenceLevels, _currentDifferenceLevel, _currentcardslevel, totalCardsLevels;
+    public string[] inspirationalQuotes;
 
     public static bool isSound, isVibration;
     private void Awake()
@@ -73,6 +74,7 @@ public class HomeManager : MonoBehaviour
             vibrationButton.transform.GetChild(1).gameObject.SetActive(false);
             vibrationButton.GetComponent<Image>().color = off;
         }
+
         // loadPuzzleLevels();
         // loadDifferenceLevel();
     }
@@ -123,8 +125,10 @@ public class HomeManager : MonoBehaviour
 
     public void loadPuzzleLevels()
     {
+
         _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
         Debug.Log(_currentDifferenceLevel);
+
         for (int i = 1; i <= totalPuzzleLevels; i++)
         {
             GameObject puzzlelevelbutton = Instantiate(LevelSelectButtonPrefab, puzzleLevelPanel);
@@ -181,6 +185,10 @@ public class HomeManager : MonoBehaviour
     public void loadMcCardsLevel()
     {
         _currentcardslevel = PlayerPrefs.GetInt("cardslevel");
+        if (_currentcardslevel >= totalCardsLevels)
+        {
+            _currentcardslevel = 1;
+        }
         Debug.Log(_currentcardslevel);
         for (int i = 1; i <= totalCardsLevels; i++)
         {
@@ -252,5 +260,8 @@ public class HomeManager : MonoBehaviour
         }
         CheckSound.instance.checkit();
     }
-
+    public void onClickCategory(Text inspirationalQuotesText)
+    {
+        inspirationalQuotesText.text = inspirationalQuotes[Random.Range(0, inspirationalQuotes.Length)];
+    }
 }

@@ -35,19 +35,19 @@ public class matchingCardScripts : MonoBehaviour
             }
             if (!PlayerPrefs.HasKey("totalcard"))
             {
-                PlayerPrefs.SetInt("totalcard", 12);
+                PlayerPrefs.SetInt("totalcard", 2);
             }
 
             totalCards = PlayerPrefs.GetInt("totalcard", totalCards);
 
-            if (totalCards < 12 && currentcardslevel < 4)
+            if (totalCards < 2 && currentcardslevel < 2)
             {
-                totalCards = 12;
+                totalCards = 2;
                 PlayerPrefs.SetInt("totalcard", totalCards);
             }
-            else if (currentcardslevel % 5 == 0 && currentcardslevel != PlayerPrefs.GetInt("prevlevel"))
+            else if (currentcardslevel % 2 == 0 && currentcardslevel != PlayerPrefs.GetInt("prevlevel"))
             {
-                totalCards += 6;
+                totalCards += 2;
                 PlayerPrefs.SetInt("totalcard", totalCards);
             }
             else
@@ -55,26 +55,29 @@ public class matchingCardScripts : MonoBehaviour
                 totalCards = totalCards;
             }
             PlayerPrefs.SetInt("prevlevel", currentcardslevel);
-            if (totalCards >= 72)
+            if (totalCards >= 18)
             {
-                totalCards = 72;
+                totalCards = 18;
             }
-
-            if (currentcardslevel % 2 == 0)
+            //Changing Shape of grid view
+            if (totalCards <= 10)
             {
                 CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-                CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 6;
+                CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 2;
             }
             else
             {
-                CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedRowCount;
 
-                if (totalCards <= 36)
-                { CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 6; }
-                else if (totalCards > 36 && totalCards % 6 == 0)
-                {
-                    CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = totalCards / 6;
-                }
+                CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 3;
+                // CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedRowCount;
+
+                // if (totalCards <= 36)
+                // { CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 6; }
+                // else if (totalCards > 36 && totalCards % 6 == 0)
+                // {
+                //     CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = totalCards / 6;
+                // }
             }
         }
         for (int i = 0; i < totalCards / 2; i++)
