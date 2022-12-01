@@ -40,24 +40,25 @@ public class matchingCardScripts : MonoBehaviour
 
             totalCards = PlayerPrefs.GetInt("totalcard", totalCards);
 
-            if (totalCards < 2 && currentcardslevel < 2)
+            // if (totalCards < 2 && currentcardslevel < 2)
+            // {
+            //     totalCards = 2;
+            //     PlayerPrefs.SetInt("totalcard", totalCards);
+            // }
+            // else if (currentcardslevel % 2 == 0 && currentcardslevel != PlayerPrefs.GetInt("prevlevel"))
+            // {
+            //     totalCards += 2;
+            //     PlayerPrefs.SetInt("totalcard", totalCards);
+            // }
+            // else
             {
-                totalCards = 2;
-                PlayerPrefs.SetInt("totalcard", totalCards);
-            }
-            else if (currentcardslevel % 2 == 0 && currentcardslevel != PlayerPrefs.GetInt("prevlevel"))
-            {
-                totalCards += 2;
-                PlayerPrefs.SetInt("totalcard", totalCards);
-            }
-            else
-            {
-                totalCards = totalCards;
+                // totalCards = totalCards;
+                totalCards = 8;
             }
             PlayerPrefs.SetInt("prevlevel", currentcardslevel);
-            if (totalCards >= 18)
+            if (totalCards >= 8)
             {
-                totalCards = 18;
+                totalCards = 8;
             }
             //Changing Shape of grid view
             if (totalCards <= 10)
@@ -137,18 +138,22 @@ public class matchingCardScripts : MonoBehaviour
         {
             if (firstCard.name == secondCard.name)
             {
+                StartCoroutine(enableClick(false));
                 TotalScored++;
                 if (HomeManager.isSound)
                 { SoundManager.instance.Play("cardsmatch"); }
                 topscore.GetChild(TotalScored - 1).GetComponent<Image>().sprite = tikimage;
                 ScoreText.text = "Score = " + TotalScored;
                 StartCoroutine(offMatchedCards());
+                clickedIndex = 0;
+
             }
             else
             {
                 StartCoroutine(flipback());
+                clickedIndex = 0;
             }
-            clickedIndex = 0;
+
         }
         if (TotalScored >= totalCards / 2 && !win)
         {
@@ -217,11 +222,11 @@ public class matchingCardScripts : MonoBehaviour
             firstCard = EventSystem.current.currentSelectedGameObject;
             firstCard.GetComponent<Button>().interactable = false;
         }
-        else if (clickedIndex >= 2)
+        else if (clickedIndex == 2)
         {
+            StartCoroutine(enableClick(false));
             secondCard = EventSystem.current.currentSelectedGameObject;
             secondCard.GetComponent<Button>().interactable = false;
-            StartCoroutine(enableClick(false));
             // for (int i = 0; i < CardsPlacing.childCount; i++)
             // {
             //     CardsPlacing.GetChild(i).GetComponent<Button>().interactable = false;
@@ -238,6 +243,8 @@ public class matchingCardScripts : MonoBehaviour
         yield return new WaitForSeconds(1f);
         firstCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
         secondCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
+        // firstCard = null;
+        // secondCard = null;
         StartCoroutine(enableClick(true));
 
     }
@@ -251,6 +258,8 @@ public class matchingCardScripts : MonoBehaviour
         // firstCard.transform.parent = null;
         firstCard.transform.parent = Solved;
         secondCard.transform.parent = Solved;
+        // firstCard = null;
+        // secondCard = null;
         StartCoroutine(enableClick(true));
 
     }

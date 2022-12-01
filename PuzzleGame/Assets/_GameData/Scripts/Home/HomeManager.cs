@@ -26,15 +26,15 @@ public class HomeManager : MonoBehaviour
         _currentcardslevel = PlayerPrefs.GetInt("cardslevel");
         _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
         _currentDifferenceLevel = PlayerPrefs.GetInt("level");
-        if (_currentPuzzleLevel >= totalPuzzleLevels - 1)
+        if (_currentPuzzleLevel >= totalPuzzleLevels)
         {
             _currentPuzzleLevel = 1;
         }
-        if (_currentDifferenceLevel >= totalDifferenceLevels - 1)
+        if (_currentDifferenceLevel >= totalDifferenceLevels)
         {
             _currentDifferenceLevel = 1;
         }
-        if (_currentcardslevel >= totalCardsLevels - 1)
+        if (_currentcardslevel >= totalCardsLevels)
         {
             _currentcardslevel = 1;
         }
@@ -128,7 +128,11 @@ public class HomeManager : MonoBehaviour
 
         _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
         Debug.Log(_currentDifferenceLevel);
-
+        if (_currentPuzzleLevel >= totalPuzzleLevels)
+        {
+            _currentPuzzleLevel = 1;
+            PlayerPrefs.SetInt("puzzlelevel", 1);
+        }
         for (int i = 1; i <= totalPuzzleLevels; i++)
         {
             GameObject puzzlelevelbutton = Instantiate(LevelSelectButtonPrefab, puzzleLevelPanel);
@@ -157,6 +161,11 @@ public class HomeManager : MonoBehaviour
     {
         _currentDifferenceLevel = PlayerPrefs.GetInt("level");
         Debug.Log(_currentDifferenceLevel);
+        if (_currentDifferenceLevel >= totalDifferenceLevels)
+        {
+            _currentDifferenceLevel = 1;
+            PlayerPrefs.SetInt("level", 1);
+        }
         for (int i = 1; i <= totalDifferenceLevels; i++)
         {
             GameObject differencelevelbutton = Instantiate(LevelSelectButtonPrefab, differenceLevelPanel);
@@ -188,6 +197,7 @@ public class HomeManager : MonoBehaviour
         if (_currentcardslevel >= totalCardsLevels)
         {
             _currentcardslevel = 1;
+            PlayerPrefs.SetInt("cardslevel", 1);
         }
         Debug.Log(_currentcardslevel);
         for (int i = 1; i <= totalCardsLevels; i++)
