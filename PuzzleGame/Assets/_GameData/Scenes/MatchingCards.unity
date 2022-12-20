@@ -413,7 +413,7 @@ MonoBehaviour:
   cardsPrefab: {fileID: 9025651791126649619, guid: 332a28578853f9441860ce6eb4e80832, type: 3}
   questiomarkprefab: {fileID: 3651675892897383344, guid: bd90d2b122f22504cbce0fa99518467b, type: 3}
   hintbtn: {fileID: 789856670}
-  startImage: {fileID: 0}
+  startImage: {fileID: 21300000, guid: c9cf24ae3665cbe458d2a7538a767b66, type: 3}
   tikimage: {fileID: -5304629016971282080, guid: 6e271181abb2bdb42b6999b90799d078, type: 3}
   winpanel: {fileID: 1337141071}
   MovesText: {fileID: 1370244494}

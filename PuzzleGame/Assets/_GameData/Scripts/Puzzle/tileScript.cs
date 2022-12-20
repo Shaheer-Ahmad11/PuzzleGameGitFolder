@@ -5,7 +5,7 @@ using UnityEngine;
 public class tileScript : MonoBehaviour
 {
     public Vector3 targetPosition;
-    private Vector3 correctPosition;
+    [SerializeField] private Vector3 correctPosition;
     private SpriteRenderer _sprite;
     public int number;
     public bool inRightPlace = false;

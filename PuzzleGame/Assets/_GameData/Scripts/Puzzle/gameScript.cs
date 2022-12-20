@@ -19,7 +19,6 @@ public class gameScript : MonoBehaviour
     void Start()
     {
         currentlevel = PlayerPrefs.GetInt("puzzlelevel");
-
         _camera = Camera.main;
         shuffle();
         alltiles = Resources.LoadAll<Sprite>("Puzzle/puzzlecopy/" + currentlevel);
@@ -30,7 +29,8 @@ public class gameScript : MonoBehaviour
         }
         tagretImage.sprite = currentimage;
     }
-
+    GameObject temptile;
+    bool isdragging;
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -41,6 +41,14 @@ public class gameScript : MonoBehaviour
 
             if (hit)
             {
+                //drag and drop work
+                // temptile = hit.collider.gameObject;
+                // Debug.Log(temptile.name);
+                // temptile.transform.localScale = new Vector2(temptile.transform.localScale.x + .01f, temptile.transform.localScale.y + .01f);
+                // isdragging = true;
+
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //old work
                 if (Vector2.Distance(a: emptySpace.position, b: hit.transform.position) < 2)
                 {
                     if (HomeManager.isSound)
@@ -58,29 +66,28 @@ public class gameScript : MonoBehaviour
 
                 }
             }
+
+
+
         }
+
         int correctTiles = 0;
         foreach (var a in tiles)
         {
             if (a != null)
             {
-
                 if (a.inRightPlace)
                 {
                     correctTiles++;
                 }
             }
-
         }
         if (correctTiles == tiles.Length - 1)
         {
             //    var a= GetComponent<timerScript>();
             //    a.StopTImer();
             timerScript.instance.StopTImer();
-
             StartCoroutine(waiting());
-
-
         }
     }
 
@@ -94,16 +101,10 @@ public class gameScript : MonoBehaviour
             tiles[emptySpaceIndex] = tiles[8];
             tiles[8] = null;
             emptySpaceIndex = 8;
-
-
-
         }
-
-
         int inversion;
         do
         {
-
             for (int i = 0; i <= 7; i++)
             {
                 var lastPos = tiles[i].targetPosition;
