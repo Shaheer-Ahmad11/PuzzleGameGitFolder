@@ -209,7 +209,7 @@ public class matchingCardScripts : MonoBehaviour
         topscore.gameObject.SetActive(false);
         winpanel.SetActive(true);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void onCardClick()
@@ -258,8 +258,8 @@ public class matchingCardScripts : MonoBehaviour
         // secondCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
         secondCard.transform.GetChild(1).gameObject.SetActive(false);
         secondCard.transform.GetChild(0).gameObject.SetActive(true);
-        firstCard = null;
-        secondCard = null;
+        // firstCard = null;
+        // secondCard = null;
         StartCoroutine(enableClick(true));
 
     }
@@ -273,8 +273,8 @@ public class matchingCardScripts : MonoBehaviour
         // firstCard.transform.parent = null;
         firstCard.transform.parent = Solved;
         secondCard.transform.parent = Solved;
-        firstCard = null;
-        secondCard = null;
+        // firstCard = null;
+        // secondCard = null;
         StartCoroutine(enableClick(true));
 
     }

@@ -749,6 +749,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 570194361}
     m_Modifications:
+    - target: {fileID: 6722493241590619944, guid: 8f98bc05e458bc84cbb7f6de99bfc107, type: 3}
+      propertyPath: m_TargetCamera
+      value: 
+      objectReference: {fileID: 1790554074049038481}
     - target: {fileID: 8502865055925227411, guid: 8f98bc05e458bc84cbb7f6de99bfc107, type: 3}
       propertyPath: m_Name
       value: WinPanel

@@ -400,6 +400,7 @@ MonoBehaviour:
   - {fileID: 1856675059}
   - {fileID: 1696556792}
   panel: {fileID: 8502865055536537669}
+  border: {fileID: 983247348}
   tagretImage: {fileID: 947034602}
   currentsolved: 0
 --- !u!4 &213200205
@@ -586,7 +587,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 16.064087, y: 3.9}
+  m_AnchoredPosition: {x: 16.064087, y: 3.9000015}
   m_SizeDelta: {x: 114.6672, y: 119.8}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &251837458
@@ -3713,6 +3714,38 @@ MonoBehaviour:
   correctPosition: {x: 0, y: 0, z: 0}
   number: 8
   inRightPlace: 0
+--- !u!1 &1299880385 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5121343141395680097, guid: 8f98bc05e458bc84cbb7f6de99bfc107, type: 3}
+  m_PrefabInstance: {fileID: 8502865055536537668}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1299880389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299880385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &1332849088
 GameObject:
   m_ObjectHideFlags: 0
@@ -6301,8 +6334,8 @@ Canvas:
   m_GameObject: {fileID: 1932629054}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1840553010}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -6706,6 +6739,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 430880155}
     m_Modifications:
+    - target: {fileID: 6722493241590619944, guid: 8f98bc05e458bc84cbb7f6de99bfc107, type: 3}
+      propertyPath: m_TargetCamera
+      value: 
+      objectReference: {fileID: 1840553010}
     - target: {fileID: 8502865055925227411, guid: 8f98bc05e458bc84cbb7f6de99bfc107, type: 3}
       propertyPath: m_Name
       value: WinPanel

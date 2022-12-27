@@ -317,8 +317,8 @@ Canvas:
   m_GameObject: {fileID: 426582977}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 446099887}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -932,6 +932,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1602264556}
     m_Modifications:
+    - target: {fileID: 5121343141395680097, guid: 8f98bc05e458bc84cbb7f6de99bfc107, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6722493241590619944, guid: 8f98bc05e458bc84cbb7f6de99bfc107, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6722493241590619944, guid: 8f98bc05e458bc84cbb7f6de99bfc107, type: 3}
+      propertyPath: m_TargetCamera
+      value: 
+      objectReference: {fileID: 446099887}
     - target: {fileID: 8502865055925227411, guid: 8f98bc05e458bc84cbb7f6de99bfc107, type: 3}
       propertyPath: m_Name
       value: WinPanel

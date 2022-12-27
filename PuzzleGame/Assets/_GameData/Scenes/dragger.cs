@@ -5,21 +5,25 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class dragger : MonoBehaviour
 {
+    public static dragger instance;
     private GameObject temptile, temptile1;
     private bool isdragging, shuffled, win;
     private Vector2 startposition, targetposition;
     private Vector3 _offset;
-    private int currentlevel;
+    [HideInInspector] public int currentlevel;
     [HideInInspector] public Sprite[] _alltiles;
     private Sprite currentimage;
     private List<Vector2> tilePositions = new List<Vector2>();
     [SerializeField] GameObject[] alltiles;
     [SerializeField] List<Transform> tiles;
     [Tooltip("Win Panel")]
-    [SerializeField] GameObject panel;
+    [SerializeField] public GameObject panel, border;
     [SerializeField] Image tagretImage;
     [SerializeField] int currentsolved;
-
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
         shuffled = false;
@@ -148,9 +152,16 @@ public class dragger : MonoBehaviour
         if (!win)
         {
             win = true;
+
             CoinManager.instance.AddCoins(30);
             CoinManager.instance.AddDiamonds(1);
             yield return new WaitForSeconds(1f);
+            // gameObject.SetActive(false);
+            foreach (GameObject t in alltiles)
+            {
+                t.SetActive(false);
+            }
+            border.SetActive(false);
             panel.SetActive(true);
             if (HomeManager.isSound)
             { SoundManager.instance.Play("Victory"); }

@@ -6,12 +6,21 @@ using UnityEngine.SceneManagement;
 public class PuzzleGameManager : MonoBehaviour
 {
 
+    public static PuzzleGameManager instance;
     [SerializeField] private GameObject hintImage;
+
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
 
         hintImage.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Puzzle/" + PlayerPrefs.GetInt("puzzlelevel"));
+
     }
+
+
     public void onBackButtonClick()
     {
         SceneManager.LoadScene("Home");
@@ -30,4 +39,6 @@ public class PuzzleGameManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         hintImage.SetActive(false);
     }
+
+
 }
