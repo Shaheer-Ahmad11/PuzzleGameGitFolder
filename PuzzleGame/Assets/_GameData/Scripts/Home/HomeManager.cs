@@ -30,7 +30,7 @@ public class HomeManager : MonoBehaviour
         {
             _currentPuzzleLevel = 1;
         }
-        if (_currentDifferenceLevel >= totalDifferenceLevels)
+        if (_currentDifferenceLevel >= totalDifferenceLevels || _currentDifferenceLevel < 1)
         {
             _currentDifferenceLevel = 1;
         }
@@ -128,7 +128,7 @@ public class HomeManager : MonoBehaviour
 
         _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
         Debug.Log(_currentDifferenceLevel);
-        if (_currentPuzzleLevel >= totalPuzzleLevels)
+        if (_currentPuzzleLevel >= totalPuzzleLevels || _currentPuzzleLevel < 1)
         {
             _currentPuzzleLevel = 1;
             PlayerPrefs.SetInt("puzzlelevel", 1);
@@ -161,10 +161,10 @@ public class HomeManager : MonoBehaviour
     {
         _currentDifferenceLevel = PlayerPrefs.GetInt("level");
         Debug.Log(_currentDifferenceLevel);
-        if (_currentDifferenceLevel >= totalDifferenceLevels)
+        if (_currentDifferenceLevel >= totalDifferenceLevels || _currentDifferenceLevel < 1)
         {
             _currentDifferenceLevel = 1;
-            PlayerPrefs.SetInt("level", 1);
+            PlayerPrefs.SetInt("level", _currentDifferenceLevel);
         }
         for (int i = 1; i <= totalDifferenceLevels; i++)
         {
@@ -176,6 +176,8 @@ public class HomeManager : MonoBehaviour
             if (i == _currentDifferenceLevel)
             {
                 differencelevelbutton.transform.GetChild(3).gameObject.SetActive(false);
+                differencelevelbutton.transform.GetChild(1).gameObject.SetActive(true);
+                differencelevelbutton.transform.GetChild(2).gameObject.SetActive(true);
             }
             else if (i < _currentDifferenceLevel)
             {
@@ -183,8 +185,9 @@ public class HomeManager : MonoBehaviour
                 differencelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
                 differencelevelbutton.transform.GetChild(3).gameObject.SetActive(false);
             }
-            else if (i != _currentDifferenceLevel)
+            else if (i > _currentDifferenceLevel)
             {
+                differencelevelbutton.transform.GetChild(1).gameObject.SetActive(true);
                 differencelevelbutton.transform.GetChild(2).gameObject.SetActive(false);
                 differencelevelbutton.transform.GetChild(3).gameObject.SetActive(true);
             }
@@ -194,7 +197,7 @@ public class HomeManager : MonoBehaviour
     public void loadMcCardsLevel()
     {
         _currentcardslevel = PlayerPrefs.GetInt("cardslevel");
-        if (_currentcardslevel >= totalCardsLevels)
+        if (_currentcardslevel >= totalCardsLevels || _currentcardslevel < 1)
         {
             _currentcardslevel = 1;
             PlayerPrefs.SetInt("cardslevel", 1);

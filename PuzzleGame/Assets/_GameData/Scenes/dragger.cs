@@ -10,11 +10,12 @@ public class dragger : MonoBehaviour
     private Vector2 startposition, targetposition;
     private Vector3 _offset;
     private int currentlevel;
-    public Sprite[] _alltiles;
+    [HideInInspector] public Sprite[] _alltiles;
     private Sprite currentimage;
     private List<Vector2> tilePositions = new List<Vector2>();
     [SerializeField] GameObject[] alltiles;
     [SerializeField] List<Transform> tiles;
+    [Tooltip("Win Panel")]
     [SerializeField] GameObject panel;
     [SerializeField] Image tagretImage;
     [SerializeField] int currentsolved;
@@ -105,7 +106,7 @@ public class dragger : MonoBehaviour
     int randomIndex;
     IEnumerator shuffle()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
         for (int i = 0; i < alltiles.Length; i++)
         {
             alltiles[i].transform.position = tilePositions[i];

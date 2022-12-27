@@ -20,6 +20,7 @@ public class matchingCardScripts : MonoBehaviour
     public GameObject winpanel;
     public Text MovesText, ScoreText;
     bool win;
+    [SerializeField] List<int> currentselectedimagefromlist = new List<int>();
     void Start()
     {
         {
@@ -85,14 +86,24 @@ public class matchingCardScripts : MonoBehaviour
         {
             Instantiate(questiomarkprefab, topscore);
         }
-        for (int i = 0; i < totalCards; i++)
+        int looptempindex = 0, n = 0;
+        while (looptempindex < totalCards)
         {
             GameObject card = Instantiate(cardsPrefab, CardsPlacing);
             int cardnumber;
-            if (i < totalCards / 2)
+            if (looptempindex < totalCards / 2)
             {
                 cardnumber = Random.Range(0, hiddenImages.Length);
-                cardsNumbers.Add(cardnumber);
+                while (currentselectedimagefromlist.Contains(cardnumber))
+                {
+                    cardnumber = Random.Range(0, hiddenImages.Length);
+                }
+                if (!currentselectedimagefromlist.Contains(cardnumber))
+                {
+                    currentselectedimagefromlist.Add(cardnumber);
+                    cardsNumbers.Add(cardnumber);
+                }
+
             }
             else
             {
@@ -100,11 +111,11 @@ public class matchingCardScripts : MonoBehaviour
                 cardnumber = cardsNumbers[tempnum];
                 cardsNumbers.RemoveAt(tempnum);
             }
-            changetilecolor(i);
+            // changetilecolor(looptempindex);
             card.name = cardnumber.ToString();
             card.GetComponent<Button>().onClick.AddListener(onCardClick);
             card.GetComponent<Button>().interactable = false;
-
+            looptempindex++;
         }
         StartCoroutine(enableClick(false));
         Invoke("flipAll", 1f);
@@ -202,7 +213,8 @@ public class matchingCardScripts : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void onCardClick()
-    {  //perform action when press on card
+    {
+        //perform action when press on card
         if (CardsPlacing.GetComponent<GridLayoutGroup>().enabled == true)
         {
             CardsPlacing.GetComponent<GridLayoutGroup>().enabled = false;
@@ -217,34 +229,37 @@ public class matchingCardScripts : MonoBehaviour
         int Cardindex = currentCard.transform.GetSiblingIndex();
         int cardname = int.Parse(currentCard.name);
         flipCard(Cardindex, cardname);
-        if (clickedIndex == 1)
+        if (clickedIndex < 2)
         {
             firstCard = EventSystem.current.currentSelectedGameObject;
             firstCard.GetComponent<Button>().interactable = false;
         }
-        else if (clickedIndex == 2)
+        else if (clickedIndex > 1)
         {
             StartCoroutine(enableClick(false));
             secondCard = EventSystem.current.currentSelectedGameObject;
             secondCard.GetComponent<Button>().interactable = false;
-            // for (int i = 0; i < CardsPlacing.childCount; i++)
-            // {
-            //     CardsPlacing.GetChild(i).GetComponent<Button>().interactable = false;
-            // }
+
         }
     }
     void flipCard(int currentCard, int cardname)
     { //flip only one card(Clicked Card)
-        CardsPlacing.transform.GetChild(currentCard).GetChild(0).GetComponent<Image>().sprite = hiddenImages[cardname];
+        CardsPlacing.transform.GetChild(currentCard).GetChild(0).gameObject.SetActive(true);
+        CardsPlacing.transform.GetChild(currentCard).GetChild(1).gameObject.SetActive(true);
+        CardsPlacing.transform.GetChild(currentCard).GetChild(1).GetComponent<Image>().sprite = hiddenImages[cardname];
         // CardsPlacing.transform.GetChild(currentCard).GetComponent<Button>().interactable = false;
     }
     private IEnumerator flipback()
     {//flip back 2 clicked cards
         yield return new WaitForSeconds(1f);
-        firstCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
-        secondCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
-        // firstCard = null;
-        // secondCard = null;
+        // firstCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
+        firstCard.transform.GetChild(1).gameObject.SetActive(false);
+        firstCard.transform.GetChild(0).gameObject.SetActive(true);
+        // secondCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
+        secondCard.transform.GetChild(1).gameObject.SetActive(false);
+        secondCard.transform.GetChild(0).gameObject.SetActive(true);
+        firstCard = null;
+        secondCard = null;
         StartCoroutine(enableClick(true));
 
     }
@@ -258,8 +273,8 @@ public class matchingCardScripts : MonoBehaviour
         // firstCard.transform.parent = null;
         firstCard.transform.parent = Solved;
         secondCard.transform.parent = Solved;
-        // firstCard = null;
-        // secondCard = null;
+        firstCard = null;
+        secondCard = null;
         StartCoroutine(enableClick(true));
 
     }
@@ -278,7 +293,9 @@ public class matchingCardScripts : MonoBehaviour
         {
             GameObject tempcurrentCard = CardsPlacing.GetChild(i).gameObject;
             int tempIndex = int.Parse(tempcurrentCard.name);
-            tempcurrentCard.transform.GetChild(0).GetComponent<Image>().sprite = hiddenImages[tempIndex];
+            tempcurrentCard.transform.GetChild(0).gameObject.SetActive(false);
+            tempcurrentCard.transform.GetChild(1).gameObject.SetActive(true);
+            tempcurrentCard.transform.GetChild(1).GetComponent<Image>().sprite = hiddenImages[tempIndex];
             Invoke("flipBackAll", 2f);
             // tempcurrentCard.GetComponent<Button>().interactable = false;
         }
@@ -289,7 +306,9 @@ public class matchingCardScripts : MonoBehaviour
         {
             GameObject tempcurrentCard = CardsPlacing.GetChild(i).gameObject;
             int tempIndex = int.Parse(tempcurrentCard.name);
-            tempcurrentCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
+            tempcurrentCard.transform.GetChild(1).gameObject.SetActive(false);
+            tempcurrentCard.transform.GetChild(0).gameObject.SetActive(true);
+            // tempcurrentCard.transform.GetChild(0).GetComponent<Image>().sprite = startImage;
             // tempcurrentCard.GetComponent<Button>().interactable = true;
         }
         StartCoroutine(enableClick(true));
