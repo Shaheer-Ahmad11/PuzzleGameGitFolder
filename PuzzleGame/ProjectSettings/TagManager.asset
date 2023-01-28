@@ -10,6 +10,8 @@ TagManager:
   - empty
   - frame
   - tile
+  - Allman
+  - uibtn
   layers:
   - Default
   - TransparentFX

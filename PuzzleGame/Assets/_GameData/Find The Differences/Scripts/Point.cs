@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Point : MonoBehaviour
 {
@@ -14,7 +15,20 @@ public class Point : MonoBehaviour
     private void Update()
     {
     }
+    public bool IsPointerOverGameObject()
+    {
+        //check mouse
+        if (EventSystem.current.IsPointerOverGameObject())
+            return true;
+        //check touch
+        if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
+        {
+            if (EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId))
+                return true;
+        }
 
+        return false;
+    }
     private void OnMouseUp()
     {
         if (enable)

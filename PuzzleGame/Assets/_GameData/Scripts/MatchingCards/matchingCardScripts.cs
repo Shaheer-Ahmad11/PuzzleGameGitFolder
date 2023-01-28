@@ -10,7 +10,7 @@ public class matchingCardScripts : MonoBehaviour
     public Color[] tilescolor;
     public Sprite[] hiddenImages;
     public Transform topscore;
-    [SerializeField] int totalCards;
+    [SerializeField] private int totalCards;
     [SerializeField] Transform CardsPlacing, Solved;
     public GameObject cardsPrefab, questiomarkprefab, hintbtn;
     public Sprite startImage, tikimage;
@@ -23,6 +23,14 @@ public class matchingCardScripts : MonoBehaviour
     [SerializeField] List<int> currentselectedimagefromlist = new List<int>();
     void Start()
     {
+        if (HomeManager.isSound)
+        {
+            foreach (var s in SoundManager.instance.sounds)
+            {
+                SoundManager.instance.Stop(s.name);
+            }
+            SoundManager.instance.Play("MatchingBG");
+        }
         {
             if (!PlayerPrefs.HasKey("cardslevel"))
             {
@@ -39,7 +47,7 @@ public class matchingCardScripts : MonoBehaviour
                 PlayerPrefs.SetInt("totalcard", 2);
             }
 
-            totalCards = PlayerPrefs.GetInt("totalcard", totalCards);
+            // totalCards = PlayerPrefs.GetInt("totalcard", totalCards);
 
             // if (totalCards < 2 && currentcardslevel < 2)
             // {
@@ -52,35 +60,35 @@ public class matchingCardScripts : MonoBehaviour
             //     PlayerPrefs.SetInt("totalcard", totalCards);
             // }
             // else
-            {
-                // totalCards = totalCards;
-                totalCards = 8;
-            }
+            // {
+            // totalCards = totalCards;
+            // totalCards = 8;
+            // }
             PlayerPrefs.SetInt("prevlevel", currentcardslevel);
-            if (totalCards >= 8)
-            {
-                totalCards = 8;
-            }
+            // if (totalCards >= 8)
+            // {
+            //     totalCards = 8;
+            // }
             //Changing Shape of grid view
-            if (totalCards <= 10)
-            {
-                CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-                CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 2;
-            }
-            else
-            {
+            // if (totalCards <= 10)
+            // {
+            //     CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            //     CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 3;
+            // }
+            // else
+            // {
 
-                CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-                CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 3;
-                // CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedRowCount;
+            CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 3;
+            // CardsPlacing.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedRowCount;
 
-                // if (totalCards <= 36)
-                // { CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 6; }
-                // else if (totalCards > 36 && totalCards % 6 == 0)
-                // {
-                //     CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = totalCards / 6;
-                // }
-            }
+            // if (totalCards <= 36)
+            // { CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = 6; }
+            // else if (totalCards > 36 && totalCards % 6 == 0)
+            // {
+            //     CardsPlacing.GetComponent<GridLayoutGroup>().constraintCount = totalCards / 6;
+            // }
+            // }
         }
         for (int i = 0; i < totalCards / 2; i++)
         {
@@ -163,6 +171,7 @@ public class matchingCardScripts : MonoBehaviour
             {
                 StartCoroutine(flipback());
                 clickedIndex = 0;
+
             }
 
         }
@@ -201,7 +210,12 @@ public class matchingCardScripts : MonoBehaviour
         CoinManager.instance.AddCoins(30);
         CoinManager.instance.AddDiamonds(1);
         if (HomeManager.isSound)
-        { SoundManager.instance.Play("Victory"); }
+        {
+
+            SoundManager.instance.Stop("MatchingBG");
+
+            SoundManager.instance.Play("Victory");
+        }
         currentcardslevel++;
         Debug.Log("current level =" + currentcardslevel);
         PlayerPrefs.SetInt("cardslevel", currentcardslevel);
@@ -209,37 +223,42 @@ public class matchingCardScripts : MonoBehaviour
         topscore.gameObject.SetActive(false);
         winpanel.SetActive(true);
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    [SerializeField] private bool isClickEnabled;
     public void onCardClick()
     {
-        //perform action when press on card
-        if (CardsPlacing.GetComponent<GridLayoutGroup>().enabled == true)
-        {
-            CardsPlacing.GetComponent<GridLayoutGroup>().enabled = false;
-        }
-        if (HomeManager.isSound)
-        { SoundManager.instance.Play("Slide"); }
-        clickedIndex++;
-        currentClickedNumber++;
-        totalMoves = currentClickedNumber / 2;
-        MovesText.text = "Total Moves = " + totalMoves;
-        GameObject currentCard = EventSystem.current.currentSelectedGameObject;
-        int Cardindex = currentCard.transform.GetSiblingIndex();
-        int cardname = int.Parse(currentCard.name);
-        flipCard(Cardindex, cardname);
-        if (clickedIndex < 2)
-        {
-            firstCard = EventSystem.current.currentSelectedGameObject;
-            firstCard.GetComponent<Button>().interactable = false;
-        }
-        else if (clickedIndex > 1)
-        {
-            StartCoroutine(enableClick(false));
-            secondCard = EventSystem.current.currentSelectedGameObject;
-            secondCard.GetComponent<Button>().interactable = false;
+        if (isClickEnabled)
+        {//perform action when press on card
+            clickedIndex++;
+            if (CardsPlacing.GetComponent<GridLayoutGroup>().enabled == true)
+            {
+                CardsPlacing.GetComponent<GridLayoutGroup>().enabled = false;
+            }
+            if (HomeManager.isSound)
+            { SoundManager.instance.Play("Slide"); }
 
+            currentClickedNumber++;
+            totalMoves = currentClickedNumber / 2;
+            MovesText.text = "Total Moves = " + totalMoves;
+            GameObject currentCard = EventSystem.current.currentSelectedGameObject;
+            int Cardindex = currentCard.transform.GetSiblingIndex();
+            int cardname = int.Parse(currentCard.name);
+            flipCard(Cardindex, cardname);
+            if (clickedIndex < 2)
+            {
+                firstCard = EventSystem.current.currentSelectedGameObject;
+                firstCard.GetComponent<Button>().interactable = false;
+            }
+            else if (clickedIndex > 1)
+            {
+                StartCoroutine(enableClick(false));
+                secondCard = EventSystem.current.currentSelectedGameObject;
+                isClickEnabled = false;
+                // secondCard.GetComponent<Button>().interactable = false;
+
+            }
         }
     }
     void flipCard(int currentCard, int cardname)
@@ -248,6 +267,13 @@ public class matchingCardScripts : MonoBehaviour
         CardsPlacing.transform.GetChild(currentCard).GetChild(1).gameObject.SetActive(true);
         CardsPlacing.transform.GetChild(currentCard).GetChild(1).GetComponent<Image>().sprite = hiddenImages[cardname];
         // CardsPlacing.transform.GetChild(currentCard).GetComponent<Button>().interactable = false;
+    }
+    private IEnumerator resetveriables()
+    {
+        yield return new WaitForSeconds(.2f);
+        firstCard = null;
+        secondCard = null;
+        isClickEnabled = true;
     }
     private IEnumerator flipback()
     {//flip back 2 clicked cards
@@ -260,6 +286,7 @@ public class matchingCardScripts : MonoBehaviour
         secondCard.transform.GetChild(0).gameObject.SetActive(true);
         // firstCard = null;
         // secondCard = null;
+        StartCoroutine(resetveriables());
         StartCoroutine(enableClick(true));
 
     }
@@ -275,16 +302,19 @@ public class matchingCardScripts : MonoBehaviour
         secondCard.transform.parent = Solved;
         // firstCard = null;
         // secondCard = null;
+        StartCoroutine(resetveriables());
         StartCoroutine(enableClick(true));
 
     }
     private IEnumerator enableClick(bool isInteractable)
-    {//enable or disable click on card when needed
+    {
+        //enable or disable click on card when needed
         yield return new WaitForSeconds(0f);
         for (int i = 0; i < CardsPlacing.childCount; i++)
         {
             CardsPlacing.GetChild(i).GetComponent<Button>().interactable = isInteractable;
         }
+
     }
     public void flipAll()
     {//flip all cards 

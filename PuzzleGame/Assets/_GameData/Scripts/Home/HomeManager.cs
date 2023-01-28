@@ -49,13 +49,16 @@ public class HomeManager : MonoBehaviour
         if (PlayerPrefs.GetInt("Sound") == 1)
         {
             isSound = true;
+            SoundManager.instance.isSound = true;
             soundButton.transform.GetChild(0).gameObject.SetActive(false);
             soundButton.transform.GetChild(1).gameObject.SetActive(true);
             soundButton.GetComponent<Image>().color = on;
+
         }
         else
         {
             isSound = false;
+            SoundManager.instance.isSound = false;
             soundButton.transform.GetChild(0).gameObject.SetActive(true);
             soundButton.transform.GetChild(1).gameObject.SetActive(false);
             soundButton.GetComponent<Image>().color = off;
@@ -74,6 +77,11 @@ public class HomeManager : MonoBehaviour
             vibrationButton.transform.GetChild(1).gameObject.SetActive(false);
             vibrationButton.GetComponent<Image>().color = off;
         }
+        foreach (var s in SoundManager.instance.sounds)
+        {
+            SoundManager.instance.Stop(s.name);
+        }
+        SoundManager.instance.Play("LoginBG");
 
         // loadPuzzleLevels();
         // loadDifferenceLevel();
@@ -161,7 +169,7 @@ public class HomeManager : MonoBehaviour
     {
         _currentDifferenceLevel = PlayerPrefs.GetInt("level");
         Debug.Log(_currentDifferenceLevel);
-        if (_currentDifferenceLevel >= totalDifferenceLevels || _currentDifferenceLevel < 1)
+        if (_currentDifferenceLevel > totalDifferenceLevels || _currentDifferenceLevel < 1)
         {
             _currentDifferenceLevel = 1;
             PlayerPrefs.SetInt("level", _currentDifferenceLevel);
@@ -170,7 +178,7 @@ public class HomeManager : MonoBehaviour
         {
             GameObject differencelevelbutton = Instantiate(LevelSelectButtonPrefab, differenceLevelPanel);
             differencelevelbutton.name = i.ToString();
-            Sprite differenceImage = Resources.Load<Sprite>("Difference/" + i);
+            Sprite differenceImage = Resources.Load<Sprite>("Difference/MainIcons/" + i);
             differencelevelbutton.transform.GetChild(0).GetComponent<Image>().sprite = differenceImage;
             differencelevelbutton.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(loadDifferencelevelScene);
             if (i == _currentDifferenceLevel)
@@ -238,6 +246,11 @@ public class HomeManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("Sound", 0);
             isSound = false;
+            SoundManager.instance.isSound = false;
+            foreach (var s in SoundManager.instance.sounds)
+            {
+                SoundManager.instance.Stop(s.name);
+            }
             soundButton.transform.GetChild(0).gameObject.SetActive(true);
             soundButton.transform.GetChild(1).gameObject.SetActive(false);
             soundButton.GetComponent<Image>().color = off;
@@ -246,6 +259,8 @@ public class HomeManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("Sound", 1);
             isSound = true;
+            SoundManager.instance.isSound = true;
+            SoundManager.instance.Play("LoginBG");
             soundButton.transform.GetChild(0).gameObject.SetActive(false);
             soundButton.transform.GetChild(1).gameObject.SetActive(true);
             soundButton.GetComponent<Image>().color = on;
@@ -276,5 +291,22 @@ public class HomeManager : MonoBehaviour
     public void onClickCategory(Text inspirationalQuotesText)
     {
         inspirationalQuotesText.text = inspirationalQuotes[Random.Range(0, inspirationalQuotes.Length)];
+    }
+
+    public void onShopButtonClick()
+    {
+        foreach (var s in SoundManager.instance.sounds)
+        {
+            SoundManager.instance.Stop(s.name);
+        }
+        SoundManager.instance.Play("ShopBG");
+    }
+    public void onShopCloseButtonClick()
+    {
+        foreach (var s in SoundManager.instance.sounds)
+        {
+            SoundManager.instance.Stop(s.name);
+        }
+        SoundManager.instance.Play("LoginBG");
     }
 }

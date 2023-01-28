@@ -29,12 +29,14 @@ public class BtnHint : MonoBehaviour
         {
             if (AdNetwork.instance.isRewardedVideoAvailable)
             {
-                GetComponent<Button>().interactable = true;
+                // GetComponent<Button>().interactable = true;
+                gameObject.SetActive(true);
                 gameObject.transform.GetChild(0).gameObject.SetActive(true);
             }
             else
             {
-                GetComponent<Button>().interactable = false;
+                // GetComponent<Button>().interactable = false;
+                gameObject.SetActive(false);
                 gameObject.transform.GetChild(0).gameObject.SetActive(false);
             }
         }

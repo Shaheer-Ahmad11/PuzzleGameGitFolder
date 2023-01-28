@@ -36,17 +36,26 @@ public class GameManager : MonoBehaviour
     private GameObject levelImageB;
 
     private GameObject objWin;
-    GameObject heartParent, Home, restartLevel, cancleLevel;
-
-    int heartCount;
+    GameObject Home, restartLevel, cancleLevel;
+    public GameObject heartParent;
+    public int heartCount;
     private GameObject winPanel;
     private GameObject restartPanel;
     private string[] GObjs = { "Buttonhint", "Images", "UI Remaining" };
     public GameObject[] GObjsList = new GameObject[3];
     public GameObject pointsPanel;
     bool isPlayed;
+    [SerializeField] private GameObject[] UIObjects;
     private void Start()
     {
+        if (HomeManager.isSound)
+        {
+            foreach (var s in SoundManager.instance.sounds)
+            {
+                SoundManager.instance.Stop(s.name);
+            }
+            SoundManager.instance.Play("DifferenceBG");
+        }
         if (REF == null)
         {
             Object.DontDestroyOnLoad(base.gameObject);
@@ -94,7 +103,15 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.Save();
         MonoBehaviour.print("Save Level = " + level);
     }
-
+    private void initUIObjects()
+    {
+        // UIObjects = new List<Button>();
+        UIObjects = GameObject.FindGameObjectsWithTag("uibtn");
+        foreach (GameObject button in UIObjects)
+        {
+            button.GetComponent<Button>().onClick.AddListener(OnUIClick);
+        }
+    }
     private void LoadStars()
     {
         if (PlayerPrefs.HasKey("stars"))
@@ -223,6 +240,7 @@ public class GameManager : MonoBehaviour
         {
             GObjsList[i] = GameObject.Find(GObjs[i]);
         }
+        initUIObjects();
         pointsPanel = GameObject.FindWithTag("PointsPanel");
 
         heartParent = GameObject.Find("Hearts");
@@ -235,6 +253,7 @@ public class GameManager : MonoBehaviour
         Home.GetComponent<Button>().onClick.AddListener(GoToHome);
         isPlayed = false;
         heartCount = 3;
+
     }
 
     public void PointCheck()
@@ -260,7 +279,10 @@ public class GameManager : MonoBehaviour
         pointsPanel.SetActive(false);
         winPanel.SetActive(true);
         if (HomeManager.isSound)
-        { SoundManager.instance.Play("Victory"); }
+        {
+            SoundManager.instance.Stop("DifferenceBG");
+            SoundManager.instance.Play("Victory");
+        }
         // objWin.SetActive(value: true);
         MonoBehaviour.print("You Win!");
         float time = 6f;
@@ -285,7 +307,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("lvlGame");
     }
 
-    public static bool IsPointerOverGameObject()
+    public bool IsPointerOverGameObject()
     {
         //check mouse
         if (EventSystem.current.IsPointerOverGameObject())
@@ -294,8 +316,8 @@ public class GameManager : MonoBehaviour
         if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
         {
             if (EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId) && EventSystem.current.currentSelectedGameObject != null)
-                // if (EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId))
-                return true;
+                if (EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId))
+                    return true;
         }
 
         return false;
@@ -315,8 +337,7 @@ public class GameManager : MonoBehaviour
             isoverobject = false;
             _OnUIClick = false;
         }
-
-        else if (!isoverobject && (!_OnUIClick || !IsPointerOverGameObject()))
+        else
         {
             Debug.Log("wrong touch not over object");
             heartParent.transform.GetChild(heartCount - 1).gameObject.SetActive(false);
@@ -345,6 +366,7 @@ public class GameManager : MonoBehaviour
             if (!isPlayed && HomeManager.isSound)
             {
                 SoundManager.instance.Play("levelfailed");
+                SoundManager.instance.Stop("DifferenceBG");
                 isPlayed = true;
             }
             for (int i = 0; i < GObjsList.Length; i++)
@@ -378,8 +400,11 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("lvlGame");
     }
+
     public void OnUIClick()
     {
+        Debug.Log("on UI Click = True");
         _OnUIClick = true;
+        isoverobject = true;
     }
 }

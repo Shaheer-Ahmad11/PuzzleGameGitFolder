@@ -17,7 +17,14 @@ public class PuzzleGameManager : MonoBehaviour
     {
 
         hintImage.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Puzzle/" + PlayerPrefs.GetInt("puzzlelevel"));
-
+        if (HomeManager.isSound)
+        {
+            foreach (var s in SoundManager.instance.sounds)
+            {
+                SoundManager.instance.Stop(s.name);
+            }
+            SoundManager.instance.Play("PuzzleBG");
+        }
     }
 
 

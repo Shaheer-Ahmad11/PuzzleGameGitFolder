@@ -3,12 +3,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 public class IronSourceEvents : MonoBehaviour
 {
+#if UNITY_IPHONE || UNITY_IOS
+    delegate void ISUnityBackgroundCallback(string args);
+	[DllImport("__Internal")]
+	static extern void RegisterCallback(ISUnityBackgroundCallback func);
 
-#if UNITY_ANDROID 
+#endif
 
+#if UNITY_ANDROID
+    #pragma warning disable CS0067
     public static event Action onSdkInitializationCompletedEvent;
 
     public static event Action<IronSourceError> onRewardedVideoAdShowFailedEvent;
@@ -62,6 +69,7 @@ public class IronSourceEvents : MonoBehaviour
 
     public static event Action<string> onSegmentReceivedEvent;
 
+    [Obsolete("This method has been deprecated and won't be included in ironSource SDK versions 7.3.0 and above. Please use OnImpressionDataReady instead.")]
     public static event Action<IronSourceImpressionData> onImpressionSuccessEvent;
 #endif
 
@@ -69,7 +77,7 @@ public class IronSourceEvents : MonoBehaviour
     private const string ERROR_DESCRIPTION = "error_description";
     private const string INSTANCE_ID_KEY = "instanceId";
     private const string PLACEMENT_KEY = "placement";
-
+    #pragma warning disable CS0067
     public static event Action<IronSourceImpressionData> onImpressionDataReadyEvent;
 
 #if UNITY_ANDROID
@@ -107,13 +115,17 @@ public class IronSourceEvents : MonoBehaviour
 
 #endif
 
+#if UNITY_IPHONE || UNITY_IOS
+    #if !UNITY_EDITOR
+        RegisterCallback(FireCallback);
+    #endif
+#endif
         gameObject.name = "IronSourceEvents";           //Change the GameObject name to IronSourceEvents.
         DontDestroyOnLoad(gameObject);                 //Makes the object not be destroyed automatically when loading a new scene.
     }
 
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-
     private void registerInitializationEvents()
     {
         initializationAndroid.OnSdkInitializationCompletedEvent += () =>
@@ -122,7 +134,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onSdkInitializationCompletedEvent();
+                    onSdkInitializationCompletedEvent?.Invoke();
                 });
             }
 
@@ -137,7 +149,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onBannerAdLoadedEvent();
+                    onBannerAdLoadedEvent?.Invoke();
                 });
             }
 
@@ -149,7 +161,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onBannerAdClickedEvent();
+                    onBannerAdClickedEvent?.Invoke();
                 });
             }
         };
@@ -160,7 +172,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onBannerAdLoadFailedEvent(ironSourceError);
+                    onBannerAdLoadFailedEvent?.Invoke(ironSourceError);
                 });
             }
         };
@@ -171,7 +183,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onBannerAdLeftApplicationEvent();
+                    onBannerAdLeftApplicationEvent?.Invoke();
                 });
             }
         };
@@ -182,7 +194,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onBannerAdScreenDismissedEvent();
+                    onBannerAdScreenDismissedEvent?.Invoke();
                 });
             }
         };
@@ -193,7 +205,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onBannerAdScreenPresentedEvent();
+                    onBannerAdScreenPresentedEvent?.Invoke();
                 });
             }
         };
@@ -208,7 +220,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdClickedEvent();
+                    onInterstitialAdClickedEvent?.Invoke();
                 });
             }
         };
@@ -219,7 +231,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdReadyEvent();
+                    onInterstitialAdReadyEvent?.Invoke();
                 });
             }
         };
@@ -230,7 +242,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdClosedEvent();
+                    onInterstitialAdClosedEvent?.Invoke();
                 });
             }
         };
@@ -241,7 +253,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdOpenedEvent();
+                    onInterstitialAdOpenedEvent?.Invoke();
                 });
             }
         };
@@ -252,7 +264,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdLoadFailedEvent(ironsourceError);
+                    onInterstitialAdLoadFailedEvent?.Invoke(ironsourceError);
                 });
             }
         };
@@ -263,7 +275,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdShowFailedEvent(ironSourceError);
+                    onInterstitialAdShowFailedEvent?.Invoke(ironSourceError);
                 });
             }
         };
@@ -274,7 +286,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdShowSucceededEvent();
+                    onInterstitialAdShowSucceededEvent?.Invoke();
                 });
             }
         };
@@ -290,7 +302,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdReadyDemandOnlyEvent(instanceId);
+                    onInterstitialAdReadyDemandOnlyEvent?.Invoke(instanceId);
                 });
             }
         };
@@ -301,7 +313,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdClosedDemandOnlyEvent(instanceId);
+                    onInterstitialAdClosedDemandOnlyEvent?.Invoke(instanceId);
                 });
             }
         };
@@ -312,7 +324,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdOpenedDemandOnlyEvent(instanceId);
+                    onInterstitialAdOpenedDemandOnlyEvent?.Invoke(instanceId);
                 });
             }
         };
@@ -323,7 +335,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdClickedDemandOnlyEvent(instanceId);
+                    onInterstitialAdClickedDemandOnlyEvent?.Invoke(instanceId);
                 });
             }
         };
@@ -334,7 +346,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdLoadFailedDemandOnlyEvent(instanceId, ironSourceError);
+                    onInterstitialAdLoadFailedDemandOnlyEvent?.Invoke(instanceId, ironSourceError);
                 });
             }
         };
@@ -345,7 +357,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onInterstitialAdShowFailedDemandOnlyEvent(instanceId, ironSourceError);
+                    onInterstitialAdShowFailedDemandOnlyEvent?.Invoke(instanceId, ironSourceError);
                 });
             }
         };
@@ -360,7 +372,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onOfferwallOpenedEvent();
+                    onOfferwallOpenedEvent?.Invoke();
                 });
             }
         };
@@ -371,7 +383,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onOfferwallShowFailedEvent(error);
+                    onOfferwallShowFailedEvent?.Invoke(error);
                 });
             }
 
@@ -383,7 +395,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onOfferwallClosedEvent();
+                    onOfferwallClosedEvent?.Invoke();
                 });
             }
         };
@@ -394,7 +406,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onOfferwallAvailableEvent(isAvailable);
+                    onOfferwallAvailableEvent?.Invoke(isAvailable);
                 });
             }
         };
@@ -405,7 +417,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onOfferwallAdCreditedEvent(dic);
+                    onOfferwallAdCreditedEvent?.Invoke(dic);
                 });
             }
         };
@@ -416,7 +428,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onGetOfferwallCreditsFailedEvent(error);
+                    onGetOfferwallCreditsFailedEvent?.Invoke(error);
                 });
             }
         };
@@ -431,7 +443,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onSegmentReceivedEvent(segmentName);
+                    onSegmentReceivedEvent?.Invoke(segmentName);
                 });
             }
         };
@@ -442,11 +454,12 @@ public class IronSourceEvents : MonoBehaviour
     {
         impressionDataAndroid.OnImpressionSuccess += (impressionData) =>
         {
+
             if (onImpressionSuccessEvent != null)
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onImpressionSuccessEvent(impressionData);
+                    onImpressionSuccessEvent?.Invoke(impressionData);
                 });
             }
         };
@@ -455,7 +468,7 @@ public class IronSourceEvents : MonoBehaviour
         {
             if (onImpressionDataReadyEvent != null)
             {
-                onImpressionDataReadyEvent(impressionData);
+                onImpressionDataReadyEvent?.Invoke(impressionData);
             }
         };
     }
@@ -470,7 +483,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdClosedDemandOnlyEvent(instanceId);
+                    onRewardedVideoAdClosedDemandOnlyEvent?.Invoke(instanceId);
                 });
             }
         };
@@ -481,7 +494,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdLoadedDemandOnlyEvent(instanceId);
+                    onRewardedVideoAdLoadedDemandOnlyEvent?.Invoke(instanceId);
                 });
             }
         };
@@ -492,7 +505,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdClickedDemandOnlyEvent(instanceId);
+                    onRewardedVideoAdClickedDemandOnlyEvent?.Invoke(instanceId);
                 });
             }
         };
@@ -503,7 +516,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdClickedDemandOnlyEvent(instanceId);
+                    onRewardedVideoAdClickedDemandOnlyEvent?.Invoke(instanceId);
                 });
             }
         };
@@ -514,7 +527,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdRewardedDemandOnlyEvent(instanceId);
+                    onRewardedVideoAdRewardedDemandOnlyEvent?.Invoke(instanceId);
                 });
             }
         };
@@ -525,7 +538,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdLoadFailedDemandOnlyEvent(instanceId, error);
+                    onRewardedVideoAdLoadFailedDemandOnlyEvent?.Invoke(instanceId, error);
                 });
             }
         };
@@ -536,7 +549,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdShowFailedDemandOnlyEvent(instanceId, error);
+                    onRewardedVideoAdShowFailedDemandOnlyEvent?.Invoke(instanceId, error);
                 });
             }
         };
@@ -551,7 +564,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdClickedEvent(IronSourcePlacement);
+                    onRewardedVideoAdClickedEvent?.Invoke(IronSourcePlacement);
                 });
             }
         };
@@ -561,7 +574,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdShowFailedEvent(IronSourceError);
+                    onRewardedVideoAdShowFailedEvent?.Invoke(IronSourceError);
                 });
             }
         };
@@ -571,7 +584,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdOpenedEvent();
+                    onRewardedVideoAdOpenedEvent?.Invoke();
                 });
             }
         };
@@ -581,7 +594,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdClosedEvent();
+                    onRewardedVideoAdClosedEvent?.Invoke();
                 });
             }
         };
@@ -591,7 +604,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdStartedEvent();
+                    onRewardedVideoAdStartedEvent?.Invoke();
                 });
             }
         };
@@ -601,7 +614,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdEndedEvent();
+                    onRewardedVideoAdEndedEvent?.Invoke();
                 });
             }
         };
@@ -611,7 +624,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdRewardedEvent(IronSourcePlacement);
+                    onRewardedVideoAdRewardedEvent?.Invoke(IronSourcePlacement);
                 });
             }
         };
@@ -622,7 +635,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAvailabilityChangedEvent(isAvailable);
+                    onRewardedVideoAvailabilityChangedEvent?.Invoke(isAvailable);
                 });
             }
         };
@@ -637,7 +650,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdReadyEvent();
+                    onRewardedVideoAdReadyEvent?.Invoke();
                 });
             }
         };
@@ -648,7 +661,7 @@ public class IronSourceEvents : MonoBehaviour
             {
                 IronSourceEventsDispatcher.executeAction(() =>
                 {
-                    onRewardedVideoAdLoadFailedEvent(IronSourceError);
+                    onRewardedVideoAdLoadFailedEvent?.Invoke(IronSourceError);
                 });
             }
         };
@@ -660,28 +673,47 @@ public class IronSourceEvents : MonoBehaviour
 
 #if !UNITY_ANDROID
 
-        // ******************************* Init Event *******************************
+#if UNITY_IPHONE || UNITY_IOS
+
+
+    [AOT.MonoPInvokeCallback(typeof(ISUnityBackgroundCallback))]
+    public static void FireCallback(string args)
+    {
+        if (onImpressionDataReadyEvent != null)
+        {
+            InvokeEvent(onImpressionDataReadyEvent, args);
+        }
+    }
+#endif
+
+    // ******************************* Init Event *******************************
 
     private static event Action _onSdkInitializationCompletedEvent;
 
-    public static event Action onSdkInitializationCompletedEvent {
-        add {
-            if (_onSdkInitializationCompletedEvent == null || !_onSdkInitializationCompletedEvent.GetInvocationList ().Contains (value)) {
+    public static event Action onSdkInitializationCompletedEvent
+    {
+        add
+        {
+            if (_onSdkInitializationCompletedEvent == null || !_onSdkInitializationCompletedEvent.GetInvocationList().Contains(value))
+            {
                 _onSdkInitializationCompletedEvent += value;
             }
         }
-    
-        remove {
-            if (_onSdkInitializationCompletedEvent != null || _onSdkInitializationCompletedEvent.GetInvocationList ().Contains (value)) {
+
+        remove
+        {
+            if (_onSdkInitializationCompletedEvent != null && _onSdkInitializationCompletedEvent.GetInvocationList().Contains(value))
+            {
                 _onSdkInitializationCompletedEvent -= value;
             }
         }
     }
 
-    public void onSdkInitializationCompleted (string empty)
+    public void onSdkInitializationCompleted(string empty)
     {
-        if (_onSdkInitializationCompletedEvent != null) {
-            _onSdkInitializationCompletedEvent ();
+        if (_onSdkInitializationCompletedEvent != null)
+        {
+            _onSdkInitializationCompletedEvent();
         }
     }
 
@@ -700,7 +732,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdShowFailedEvent != null || _onRewardedVideoAdShowFailedEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdShowFailedEvent != null && _onRewardedVideoAdShowFailedEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdShowFailedEvent -= value;
             }
@@ -730,7 +762,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdOpenedEvent != null || _onRewardedVideoAdOpenedEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdOpenedEvent != null && _onRewardedVideoAdOpenedEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdOpenedEvent -= value;
             }
@@ -759,7 +791,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdClosedEvent != null || _onRewardedVideoAdClosedEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdClosedEvent != null && _onRewardedVideoAdClosedEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdClosedEvent -= value;
             }
@@ -788,7 +820,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdStartedEvent != null || _onRewardedVideoAdStartedEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdStartedEvent != null && _onRewardedVideoAdStartedEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdStartedEvent -= value;
             }
@@ -817,7 +849,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdEndedEvent != null || _onRewardedVideoAdEndedEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdEndedEvent != null && _onRewardedVideoAdEndedEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdEndedEvent -= value;
             }
@@ -846,7 +878,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdRewardedEvent != null || _onRewardedVideoAdRewardedEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdRewardedEvent != null && _onRewardedVideoAdRewardedEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdRewardedEvent -= value;
             }
@@ -876,7 +908,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdClickedEvent != null || _onRewardedVideoAdClickedEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdClickedEvent != null && _onRewardedVideoAdClickedEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdClickedEvent -= value;
             }
@@ -906,7 +938,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAvailabilityChangedEvent != null || _onRewardedVideoAvailabilityChangedEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAvailabilityChangedEvent != null && _onRewardedVideoAvailabilityChangedEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAvailabilityChangedEvent -= value;
             }
@@ -936,7 +968,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdLoadedDemandOnlyEvent != null || _onRewardedVideoAdLoadedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdLoadedDemandOnlyEvent != null && _onRewardedVideoAdLoadedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdLoadedDemandOnlyEvent -= value;
             }
@@ -965,7 +997,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdLoadFailedDemandOnlyEvent != null || _onRewardedVideoAdLoadFailedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdLoadFailedDemandOnlyEvent != null && _onRewardedVideoAdLoadFailedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdLoadFailedDemandOnlyEvent -= value;
             }
@@ -997,7 +1029,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdOpenedDemandOnlyEvent != null || _onRewardedVideoAdOpenedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdOpenedDemandOnlyEvent != null && _onRewardedVideoAdOpenedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdOpenedDemandOnlyEvent -= value;
             }
@@ -1026,7 +1058,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdClosedDemandOnlyEvent != null || _onRewardedVideoAdClosedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdClosedDemandOnlyEvent != null && _onRewardedVideoAdClosedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdClosedDemandOnlyEvent -= value;
             }
@@ -1055,7 +1087,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdRewardedDemandOnlyEvent != null || _onRewardedVideoAdRewardedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdRewardedDemandOnlyEvent != null && _onRewardedVideoAdRewardedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdRewardedDemandOnlyEvent -= value;
             }
@@ -1084,7 +1116,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdShowFailedDemandOnlyEvent != null || _onRewardedVideoAdShowFailedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdShowFailedDemandOnlyEvent != null && _onRewardedVideoAdShowFailedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdShowFailedDemandOnlyEvent -= value;
             }
@@ -1116,7 +1148,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdClickedDemandOnlyEvent != null || _onRewardedVideoAdClickedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdClickedDemandOnlyEvent != null && _onRewardedVideoAdClickedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdClickedDemandOnlyEvent -= value;
             }
@@ -1131,28 +1163,33 @@ public class IronSourceEvents : MonoBehaviour
         }
     }
 
-     private static event Action<string> _onSegmentReceivedEvent;
-        public static event Action<string> onSegmentReceivedEvent {
-            add {
-                if (_onSegmentReceivedEvent == null || !_onSegmentReceivedEvent.GetInvocationList ().Contains (value)) {
-                    _onSegmentReceivedEvent += value;
-                }
-            }
-        
-            remove {
-                if (_onSegmentReceivedEvent != null || _onSegmentReceivedEvent.GetInvocationList ().Contains (value)) {
-                    _onSegmentReceivedEvent -= value;
-                }
-            }
-        }
-    
-        public void onSegmentReceived (string segmentName)
+    private static event Action<string> _onSegmentReceivedEvent;
+    public static event Action<string> onSegmentReceivedEvent
+    {
+        add
         {
-            if (_onSegmentReceivedEvent != null)
-                _onSegmentReceivedEvent (segmentName);
+            if (_onSegmentReceivedEvent == null || !_onSegmentReceivedEvent.GetInvocationList().Contains(value))
+            {
+                _onSegmentReceivedEvent += value;
+            }
         }
 
-        // ******************************* Interstitial Events *******************************
+        remove
+        {
+            if (_onSegmentReceivedEvent != null && _onSegmentReceivedEvent.GetInvocationList().Contains(value))
+            {
+                _onSegmentReceivedEvent -= value;
+            }
+        }
+    }
+
+    public void onSegmentReceived(string segmentName)
+    {
+        if (_onSegmentReceivedEvent != null)
+            _onSegmentReceivedEvent(segmentName);
+    }
+
+    // ******************************* Interstitial Events *******************************
 
     private static event Action _onInterstitialAdReadyEvent;
 
@@ -1168,7 +1205,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdReadyEvent != null || _onInterstitialAdReadyEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdReadyEvent != null && _onInterstitialAdReadyEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdReadyEvent -= value;
             }
@@ -1195,7 +1232,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdLoadFailedEvent != null || _onInterstitialAdLoadFailedEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdLoadFailedEvent != null && _onInterstitialAdLoadFailedEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdLoadFailedEvent -= value;
             }
@@ -1225,7 +1262,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdOpenedEvent != null || _onInterstitialAdOpenedEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdOpenedEvent != null && _onInterstitialAdOpenedEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdOpenedEvent -= value;
             }
@@ -1254,7 +1291,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdClosedEvent != null || _onInterstitialAdClosedEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdClosedEvent != null && _onInterstitialAdClosedEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdClosedEvent -= value;
             }
@@ -1283,7 +1320,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdShowSucceededEvent != null || _onInterstitialAdShowSucceededEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdShowSucceededEvent != null && _onInterstitialAdShowSucceededEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdShowSucceededEvent -= value;
             }
@@ -1312,7 +1349,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdShowFailedEvent != null || _onInterstitialAdShowFailedEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdShowFailedEvent != null && _onInterstitialAdShowFailedEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdShowFailedEvent -= value;
             }
@@ -1342,7 +1379,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdClickedEvent != null || _onInterstitialAdClickedEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdClickedEvent != null && _onInterstitialAdClickedEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdClickedEvent -= value;
             }
@@ -1373,7 +1410,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdReadyDemandOnlyEvent != null || _onInterstitialAdReadyDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdReadyDemandOnlyEvent != null && _onInterstitialAdReadyDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdReadyDemandOnlyEvent -= value;
             }
@@ -1401,7 +1438,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdLoadFailedDemandOnlyEvent != null || _onInterstitialAdLoadFailedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdLoadFailedDemandOnlyEvent != null && _onInterstitialAdLoadFailedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdLoadFailedDemandOnlyEvent -= value;
             }
@@ -1433,7 +1470,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdOpenedDemandOnlyEvent != null || _onInterstitialAdOpenedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdOpenedDemandOnlyEvent != null && _onInterstitialAdOpenedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdOpenedDemandOnlyEvent -= value;
             }
@@ -1462,7 +1499,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdClosedDemandOnlyEvent != null || _onInterstitialAdClosedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdClosedDemandOnlyEvent != null && _onInterstitialAdClosedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdClosedDemandOnlyEvent -= value;
             }
@@ -1491,7 +1528,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdShowFailedDemandOnlyEvent != null || _onInterstitialAdShowFailedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdShowFailedDemandOnlyEvent != null && _onInterstitialAdShowFailedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdShowFailedDemandOnlyEvent -= value;
             }
@@ -1523,7 +1560,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onInterstitialAdClickedDemandOnlyEvent != null || _onInterstitialAdClickedDemandOnlyEvent.GetInvocationList().Contains(value))
+            if (_onInterstitialAdClickedDemandOnlyEvent != null && _onInterstitialAdClickedDemandOnlyEvent.GetInvocationList().Contains(value))
             {
                 _onInterstitialAdClickedDemandOnlyEvent -= value;
             }
@@ -1554,7 +1591,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onOfferwallOpenedEvent != null || _onOfferwallOpenedEvent.GetInvocationList().Contains(value))
+            if (_onOfferwallOpenedEvent != null && _onOfferwallOpenedEvent.GetInvocationList().Contains(value))
             {
                 _onOfferwallOpenedEvent -= value;
             }
@@ -1583,7 +1620,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onOfferwallShowFailedEvent != null || _onOfferwallShowFailedEvent.GetInvocationList().Contains(value))
+            if (_onOfferwallShowFailedEvent != null && _onOfferwallShowFailedEvent.GetInvocationList().Contains(value))
             {
                 _onOfferwallShowFailedEvent -= value;
             }
@@ -1613,7 +1650,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onOfferwallClosedEvent != null || _onOfferwallClosedEvent.GetInvocationList().Contains(value))
+            if (_onOfferwallClosedEvent != null && _onOfferwallClosedEvent.GetInvocationList().Contains(value))
             {
                 _onOfferwallClosedEvent -= value;
             }
@@ -1642,7 +1679,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onGetOfferwallCreditsFailedEvent != null || _onGetOfferwallCreditsFailedEvent.GetInvocationList().Contains(value))
+            if (_onGetOfferwallCreditsFailedEvent != null && _onGetOfferwallCreditsFailedEvent.GetInvocationList().Contains(value))
             {
                 _onGetOfferwallCreditsFailedEvent -= value;
             }
@@ -1673,7 +1710,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onOfferwallAdCreditedEvent != null || _onOfferwallAdCreditedEvent.GetInvocationList().Contains(value))
+            if (_onOfferwallAdCreditedEvent != null && _onOfferwallAdCreditedEvent.GetInvocationList().Contains(value))
             {
                 _onOfferwallAdCreditedEvent -= value;
             }
@@ -1700,7 +1737,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onOfferwallAvailableEvent != null || _onOfferwallAvailableEvent.GetInvocationList().Contains(value))
+            if (_onOfferwallAvailableEvent != null && _onOfferwallAvailableEvent.GetInvocationList().Contains(value))
             {
                 _onOfferwallAvailableEvent -= value;
             }
@@ -1729,7 +1766,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onBannerAdLoadedEvent != null || _onBannerAdLoadedEvent.GetInvocationList().Contains(value))
+            if (_onBannerAdLoadedEvent != null && _onBannerAdLoadedEvent.GetInvocationList().Contains(value))
             {
                 _onBannerAdLoadedEvent -= value;
             }
@@ -1756,7 +1793,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onBannerAdLoadFailedEvent != null || _onBannerAdLoadFailedEvent.GetInvocationList().Contains(value))
+            if (_onBannerAdLoadFailedEvent != null && _onBannerAdLoadFailedEvent.GetInvocationList().Contains(value))
             {
                 _onBannerAdLoadFailedEvent -= value;
             }
@@ -1787,7 +1824,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onBannerAdClickedEvent != null || _onBannerAdClickedEvent.GetInvocationList().Contains(value))
+            if (_onBannerAdClickedEvent != null && _onBannerAdClickedEvent.GetInvocationList().Contains(value))
             {
                 _onBannerAdClickedEvent -= value;
             }
@@ -1814,7 +1851,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onBannerAdScreenPresentedEvent != null || _onBannerAdScreenPresentedEvent.GetInvocationList().Contains(value))
+            if (_onBannerAdScreenPresentedEvent != null && _onBannerAdScreenPresentedEvent.GetInvocationList().Contains(value))
             {
                 _onBannerAdScreenPresentedEvent -= value;
             }
@@ -1841,7 +1878,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onBannerAdScreenDismissedEvent != null || _onBannerAdScreenDismissedEvent.GetInvocationList().Contains(value))
+            if (_onBannerAdScreenDismissedEvent != null && _onBannerAdScreenDismissedEvent.GetInvocationList().Contains(value))
             {
                 _onBannerAdScreenDismissedEvent -= value;
             }
@@ -1868,7 +1905,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onBannerAdLeftApplicationEvent != null || _onBannerAdLeftApplicationEvent.GetInvocationList().Contains(value))
+            if (_onBannerAdLeftApplicationEvent != null && _onBannerAdLeftApplicationEvent.GetInvocationList().Contains(value))
             {
                 _onBannerAdLeftApplicationEvent -= value;
             }
@@ -1883,41 +1920,36 @@ public class IronSourceEvents : MonoBehaviour
 
     private static event Action<IronSourceImpressionData> _onImpressionSuccessEvent;
 
-        public static event Action<IronSourceImpressionData> onImpressionSuccessEvent
+    public static event Action<IronSourceImpressionData> onImpressionSuccessEvent
+    {
+        add
         {
-            add
+            if (_onImpressionSuccessEvent == null || !_onImpressionSuccessEvent.GetInvocationList().Contains(value))
             {
-                if (_onImpressionSuccessEvent == null || !_onImpressionSuccessEvent.GetInvocationList().Contains(value))
-                {
-                    _onImpressionSuccessEvent += value;
-                }
-            }
-
-            remove
-            {
-                if (_onImpressionSuccessEvent != null || _onImpressionSuccessEvent.GetInvocationList().Contains(value))
-                {
-                    _onImpressionSuccessEvent -= value;
-                }
+                _onImpressionSuccessEvent += value;
             }
         }
 
-       public void onImpressionSuccess(string args)
+        remove
         {
-            IronSourceImpressionData impressionData = new IronSourceImpressionData(args);
-
-#if UNITY_IOS
-            if (onImpressionDataReadyEvent != null)
+            if (_onImpressionSuccessEvent != null && _onImpressionSuccessEvent.GetInvocationList().Contains(value))
             {
-                onImpressionDataReadyEvent(impressionData);
+                _onImpressionSuccessEvent -= value;
             }
-#endif
-            if (_onImpressionSuccessEvent != null)
-            {
+        }
+    }
+
+    public void onImpressionSuccess(string args)
+    {
+        IronSourceImpressionData impressionData = new IronSourceImpressionData(args);
+
+
+        if (_onImpressionSuccessEvent != null)
+        {
             _onImpressionSuccessEvent(impressionData);
-            }
         }
-        
+    }
+
     // ******************************* RewardedVideo Manual Load Events *******************************
 
     private static event Action<IronSourceError> _onRewardedVideoAdLoadFailedEvent;
@@ -1934,7 +1966,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdLoadFailedEvent != null || _onRewardedVideoAdLoadFailedEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdLoadFailedEvent != null && _onRewardedVideoAdLoadFailedEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdLoadFailedEvent -= value;
             }
@@ -1964,7 +1996,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onRewardedVideoAdReadyEvent != null || _onRewardedVideoAdReadyEvent.GetInvocationList().Contains(value))
+            if (_onRewardedVideoAdReadyEvent != null && _onRewardedVideoAdReadyEvent.GetInvocationList().Contains(value))
             {
                 _onRewardedVideoAdReadyEvent -= value;
             }
@@ -1998,7 +2030,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onConsentViewDidFailToLoadWithErrorEvent != null || _onConsentViewDidFailToLoadWithErrorEvent.GetInvocationList().Contains(value))
+            if (_onConsentViewDidFailToLoadWithErrorEvent != null && _onConsentViewDidFailToLoadWithErrorEvent.GetInvocationList().Contains(value))
             {
                 _onConsentViewDidFailToLoadWithErrorEvent -= value;
             }
@@ -2030,7 +2062,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onConsentViewDidFailToShowWithErrorEvent != null || _onConsentViewDidFailToShowWithErrorEvent.GetInvocationList().Contains(value))
+            if (_onConsentViewDidFailToShowWithErrorEvent != null && _onConsentViewDidFailToShowWithErrorEvent.GetInvocationList().Contains(value))
             {
                 _onConsentViewDidFailToShowWithErrorEvent -= value;
             }
@@ -2062,7 +2094,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onConsentViewDidAcceptEvent != null || _onConsentViewDidAcceptEvent.GetInvocationList().Contains(value))
+            if (_onConsentViewDidAcceptEvent != null && _onConsentViewDidAcceptEvent.GetInvocationList().Contains(value))
             {
                 _onConsentViewDidAcceptEvent -= value;
             }
@@ -2091,7 +2123,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onConsentViewDidDismissEvent != null || _onConsentViewDidDismissEvent.GetInvocationList().Contains(value))
+            if (_onConsentViewDidDismissEvent != null && _onConsentViewDidDismissEvent.GetInvocationList().Contains(value))
             {
                 _onConsentViewDidDismissEvent -= value;
             }
@@ -2120,7 +2152,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onConsentViewDidLoadSuccessEvent != null || _onConsentViewDidLoadSuccessEvent.GetInvocationList().Contains(value))
+            if (_onConsentViewDidLoadSuccessEvent != null && _onConsentViewDidLoadSuccessEvent.GetInvocationList().Contains(value))
             {
                 _onConsentViewDidLoadSuccessEvent -= value;
             }
@@ -2149,7 +2181,7 @@ public class IronSourceEvents : MonoBehaviour
 
         remove
         {
-            if (_onConsentViewDidShowSuccessEvent != null || _onConsentViewDidShowSuccessEvent.GetInvocationList().Contains(value))
+            if (_onConsentViewDidShowSuccessEvent != null && _onConsentViewDidShowSuccessEvent.GetInvocationList().Contains(value))
             {
                 _onConsentViewDidShowSuccessEvent -= value;
             }
@@ -2214,5 +2246,16 @@ public class IronSourceEvents : MonoBehaviour
         }
 
         return ssp;
+    }
+
+
+
+
+    // Invoke ImpressionDataReady Events
+
+    private static void InvokeEvent(Action<IronSourceImpressionData> evt, String args)
+    {
+        IronSourceImpressionData impressionData = new IronSourceImpressionData(args);
+        evt(impressionData);
     }
 }

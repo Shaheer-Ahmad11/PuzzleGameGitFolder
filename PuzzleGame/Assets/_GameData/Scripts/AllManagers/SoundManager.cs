@@ -36,6 +36,7 @@ public class SoundManager : MonoBehaviour
     }
     public Sound[] sounds;
     public static SoundManager instance;
+    public bool isSound;
     private void Awake()
     {
         if (instance != null)
@@ -59,14 +60,17 @@ public class SoundManager : MonoBehaviour
     }
     public void Play(string sound)
     {
-        Sound s = Array.Find(sounds, item => item.name == sound);
-        if (s == null)
+        if (isSound)
         {
-            Debug.LogWarning("Sound: " + name + " not found!");
-            return;
-        }
+            Sound s = Array.Find(sounds, item => item.name == sound);
+            if (s == null)
+            {
+                Debug.LogWarning("Sound: " + name + " not found!");
+                return;
+            }
 
-        s.source.Play();
+            s.source.Play();
+        }
     }
     public void Stop(string sound)
     {
