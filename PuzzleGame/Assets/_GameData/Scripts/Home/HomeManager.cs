@@ -135,7 +135,7 @@ public class HomeManager : MonoBehaviour
     {
 
         _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
-        Debug.Log(_currentDifferenceLevel);
+        // Debug.Log(_currentDifferenceLevel);
         if (_currentPuzzleLevel >= totalPuzzleLevels || _currentPuzzleLevel < 1)
         {
             _currentPuzzleLevel = 1;
@@ -168,7 +168,7 @@ public class HomeManager : MonoBehaviour
     public void loadDifferenceLevel()
     {
         _currentDifferenceLevel = PlayerPrefs.GetInt("level");
-        Debug.Log(_currentDifferenceLevel);
+        // Debug.Log(_currentDifferenceLevel);
         if (_currentDifferenceLevel > totalDifferenceLevels || _currentDifferenceLevel < 1)
         {
             _currentDifferenceLevel = 1;
@@ -210,7 +210,7 @@ public class HomeManager : MonoBehaviour
             _currentcardslevel = 1;
             PlayerPrefs.SetInt("cardslevel", 1);
         }
-        Debug.Log(_currentcardslevel);
+        // Debug.Log(_currentcardslevel);
         for (int i = 1; i <= totalCardsLevels; i++)
         {
             GameObject Cardslevelbutton = Instantiate(LevelSelectButtonPrefab, CardsLevelPanel);

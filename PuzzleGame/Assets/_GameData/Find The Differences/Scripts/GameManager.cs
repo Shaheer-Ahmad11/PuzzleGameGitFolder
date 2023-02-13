@@ -247,8 +247,8 @@ public class GameManager : MonoBehaviour
         winPanel = heartParent.transform.parent.transform.GetChild(5).gameObject;
 
         restartPanel = heartParent.transform.parent.transform.GetChild(6).gameObject;
-        restartPanel.transform.GetChild(0).GetChild(0).GetComponent<Button>().onClick.AddListener(GoToHome);
-        restartPanel.transform.GetChild(0).GetChild(1).GetComponent<Button>().onClick.AddListener(RestartLevel);
+        restartPanel.transform.GetChild(0).GetChild(1).GetComponent<Button>().onClick.AddListener(GoToHome);
+        restartPanel.transform.GetChild(0).GetChild(2).GetComponent<Button>().onClick.AddListener(RestartLevel);
         Home = GameObject.Find("Home");
         Home.GetComponent<Button>().onClick.AddListener(GoToHome);
         isPlayed = false;

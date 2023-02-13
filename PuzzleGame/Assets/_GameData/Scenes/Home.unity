@@ -1058,7 +1058,7 @@ MonoBehaviour:
   sounds:
   - name: Victory
     clip: {fileID: 8300000, guid: adfcdbe8f9ef74c489babeaadbff474e, type: 3}
-    volume: 1
+    volume: 0
     volumeVariance: 1
     pitch: 3
     pitchVariance: 1
@@ -11116,7 +11116,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1934049911
 MonoBehaviour:
   m_ObjectHideFlags: 0
