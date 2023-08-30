@@ -11,7 +11,10 @@ public class HomeManager : MonoBehaviour
     public GameObject LevelSelectButtonPrefab, puzzleLevelSelectPanel, differenceLevelSelectPanel, CardsLevelselectPanel, soundButton, vibrationButton;
     public Transform puzzleLevelPanel, differenceLevelPanel, CardsLevelPanel;
     public int totalPuzzleLevels, _currentPuzzleLevel, totalDifferenceLevels, _currentDifferenceLevel, _currentcardslevel, totalCardsLevels;
+
+    public Text[] dateField;
     public string[] inspirationalQuotes;
+
 
     public static bool isSound, isVibration;
     private void Awake()
@@ -82,9 +85,22 @@ public class HomeManager : MonoBehaviour
             SoundManager.instance.Stop(s.name);
         }
         SoundManager.instance.Play("LoginBG");
+        string _date = getDate();
+       
+        foreach(Text t in dateField)
+        {
+            t.text = _date;
 
+        }
         // loadPuzzleLevels();
         // loadDifferenceLevel();
+    }
+    private string getDate()
+    {
+        int _day = System.DateTime.Now.Day;
+        string month = System.DateTime.Now.ToString("MMMM");
+        
+        return month+" "+_day;
     }
     public void onPuzzleButonClick()
     {

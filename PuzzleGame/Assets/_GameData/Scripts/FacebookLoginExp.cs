@@ -17,6 +17,7 @@ public class FacebookLoginExp : MonoBehaviour
     [Header("PlayFab app id")]
     public string titleId;
     public static int puzzlelevel, differencelevel, matchingcards;
+    [SerializeField] private int startingDiamonds, startingCoins;
     public static FacebookLoginExp Instance;
     public bool isLoggedin;
     void Awake()
@@ -56,7 +57,7 @@ public class FacebookLoginExp : MonoBehaviour
             }
             if (!PlayerPrefs.HasKey("totalCoins"))
             {
-                PlayerPrefs.SetInt("totalCoins", 100);
+                PlayerPrefs.SetInt("totalCoins", startingCoins);
             }
             if (!PlayerPrefs.HasKey("cardslevel"))
             {
@@ -64,7 +65,7 @@ public class FacebookLoginExp : MonoBehaviour
             }
             if (!PlayerPrefs.HasKey("totaldiamonds"))
             {
-                PlayerPrefs.SetInt("totaldiamonds", 25);
+                PlayerPrefs.SetInt("totaldiamonds", startingDiamonds);
             }
         }
 
