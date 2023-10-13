@@ -194,10 +194,10 @@ public class dragger : MonoBehaviour
                 if (AdNetwork.instance.isInterstitialReady)
                 { AdNetwork.instance.showInterstitialAd(); }
             }
-            if (FacebookLoginExp.Instance.isLoggedin)
+            /*if (FacebookLoginExp.Instance.isLoggedin)
             {
                 FacebookLoginExp.Instance.saveDatatoPlayFab();
-            }
+            }*/
         }
     }
 }

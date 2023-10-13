@@ -26,6 +26,9 @@ public class HomeManager : MonoBehaviour
     }
     private void Start()
     {
+        loadPuzzleLevels();
+        loadDifferenceLevel();
+        loadMcCardsLevel();
         _currentcardslevel = PlayerPrefs.GetInt("cardslevel");
         _currentPuzzleLevel = PlayerPrefs.GetInt("puzzlelevel");
         _currentDifferenceLevel = PlayerPrefs.GetInt("level");
