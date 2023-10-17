@@ -2766,13 +2766,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5adf266c0e06e346953184e6991ac44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fb: {fileID: 1757444744}
-  FB_userName: {fileID: 1709024818}
-  FB_userDp: {fileID: 1832464185}
-  titleId: EE923
-  startingDiamonds: 25
-  startingCoins: 300
-  isLoggedin: 0
 --- !u!1 &266409497
 GameObject:
   m_ObjectHideFlags: 0
@@ -13496,15 +13489,7 @@ MonoBehaviour:
   - {fileID: 944121150}
   - {fileID: 970776232}
   inspirationalQuotes:
-  - '"Nothing is impossible"'
-  - '"Success is not final, failure is not fatal"'
-  - ' "You define your own life. Don''t let other people write your script"'
-  - '"You are never too old to set another goal or to dream a new dream"'
-  - ' "Spread love everywhere you go"'
-  - '"Do not allow people to dim your shine because they are blinded. Tell them to
-    put some sunglasses on"'
-  - '"You can be everything. You can be the infinite amount of things that people
-    are"'
+  - Solve The Puzzles
 --- !u!1 &1615020658
 GameObject:
   m_ObjectHideFlags: 0
@@ -13856,7 +13841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1678950034
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17350,7 +17335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2088027054
 RectTransform:
   m_ObjectHideFlags: 0
